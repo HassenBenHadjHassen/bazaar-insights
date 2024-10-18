@@ -3,7 +3,7 @@ import app from "./app";
 import dotenv from "dotenv";
 import { Datasource } from "./data/datasource";
 
-dotenv.config();
+dotenv.config({ path: "../.env" });
 
 const PORT = process.env.PORT || 3000;
 

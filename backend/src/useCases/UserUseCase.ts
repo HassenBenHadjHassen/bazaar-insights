@@ -6,25 +6,63 @@ import {
 } from "../models/UserRegister";
 import { Datasource } from "../data/datasource";
 import { UseCaseReturn } from "../types/useCaseReturn";
+import { UserLoginModel } from "../models/UserLogin";
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+import { MESSAGES, STATUS_CODES } from "../utils/constants";
+import {
+  userLoginSchema,
+  userRegisterSchema,
+} from "../utils/validationSchemas";
+
+dotenv.config();
 
 @injectable()
 export class UserUseCase {
   constructor(@inject(Datasource) private datasource: Datasource) {}
 
-  registerUser = async (
-    userData: UserRegisterModel
-  ): Promise<UseCaseReturn> => {
+  private generateToken(userId: string): string {
+    const jwtSecret = process.env.JWT_SECRET;
+    if (!jwtSecret) {
+      console.warn("JWT_SECRET is not defined in environment variables");
+      process.exit(1);
+    }
+    return jwt.sign({ userId }, jwtSecret, { expiresIn: "6h" });
+  }
+
+  private createResponse(
+    success: boolean,
+    statusCode: number,
+    message: string
+  ): UseCaseReturn {
+    return {
+      success: success,
+      statusCode,
+      message,
+    };
+  }
+
+  createUser = async (userData: UserRegisterModel): Promise<UseCaseReturn> => {
+    const { error } = userRegisterSchema.validate(userData);
+    if (error) {
+      return this.createResponse(
+        false,
+        STATUS_CODES.BAD_REQUEST,
+        error.details[0].message
+      );
+    }
+
     try {
       const existingUser = await this.datasource.findUniqueUser({
         where: { email: userData.email },
       });
 
       if (existingUser) {
-        return {
-          success: false,
-          statusCode: 400,
-          message: "Email already in use",
-        };
+        return this.createResponse(
+          false,
+          STATUS_CODES.BAD_REQUEST,
+          MESSAGES.EMAIL_IN_USE
+        );
       }
 
       const hashedPassword = await bcrypt.hash(userData.password, 10);
@@ -36,25 +74,70 @@ export class UserUseCase {
 
       await this.datasource.createUser(newUser);
 
-      return {
-        success: true,
-        statusCode: 201,
-        message: "User registered successfully",
-      };
+      return this.createResponse(
+        true,
+        STATUS_CODES.CREATED,
+        MESSAGES.USER_REGISTERED
+      );
     } catch (error) {
       console.error("Error registering user:", error);
-      return {
-        success: false,
-        statusCode: 500,
-        message: "Internal server error",
-      };
+
+      return this.createResponse(
+        false,
+        STATUS_CODES.INTERNAL_SERVER_ERROR,
+        MESSAGES.INTERNAL_ERROR
+      );
     }
   };
 
-  getUsers() {
-    return [
-      { id: 1, name: "John Doe", email: "john@example.com" },
-      { id: 2, name: "Jane Smith", email: "jane@example.com" },
-    ];
-  }
+  authenticateUser = async (
+    userData: UserLoginModel
+  ): Promise<UseCaseReturn> => {
+    const { error } = userLoginSchema.validate(userData);
+    if (error) {
+      return this.createResponse(
+        false,
+        STATUS_CODES.BAD_REQUEST,
+        error.details[0].message
+      );
+    }
+
+    try {
+      const user = await this.datasource.findUniqueUser({
+        where: { email: userData.email },
+      });
+
+      if (!user) {
+        return this.createResponse(
+          false,
+          STATUS_CODES.UNAUTHORIZED,
+          MESSAGES.INVALID_CREDENTIALS
+        );
+      }
+
+      const isPasswordValid = await bcrypt.compare(
+        userData.password,
+        user.password
+      );
+
+      if (!isPasswordValid) {
+        return this.createResponse(
+          false,
+          STATUS_CODES.UNAUTHORIZED,
+          MESSAGES.INVALID_CREDENTIALS
+        );
+      }
+
+      const token = this.generateToken(user.id);
+
+      return this.createResponse(true, STATUS_CODES.SUCCESS, token);
+    } catch (error) {
+      console.error("Error logging in user:", error);
+      return this.createResponse(
+        false,
+        STATUS_CODES.INTERNAL_SERVER_ERROR,
+        MESSAGES.INTERNAL_ERROR
+      );
+    }
+  };
 }
