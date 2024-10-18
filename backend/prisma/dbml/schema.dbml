@@ -1,0 +1,52 @@
+//// ------------------------------------------------------
+//// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+//// ------------------------------------------------------
+
+Table User {
+  id String [pk]
+  username String [unique, not null]
+  email String [unique, not null]
+  passwordHash String [not null]
+  role Role [not null]
+  dailyUsageTime Int [not null, default: 0]
+  dailyFilterAttempts Int [not null, default: 0]
+  lastLogin DateTime [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  AccessLogs AccessLog [not null]
+  Subscription Subscription
+}
+
+Table Subscription {
+  id String [pk]
+  userId String [unique, not null]
+  type SubscriptionType [not null]
+  startDate DateTime [not null]
+  endDate DateTime
+  isActive Boolean [not null, default: true]
+  user User [not null]
+}
+
+Table AccessLog {
+  id String [pk]
+  userId String [not null]
+  date DateTime [default: `now()`, not null]
+  duration Int [not null, default: 0]
+  filtersUsed Int [not null, default: 0]
+  user User [not null]
+}
+
+Enum Role {
+  GUEST
+  ACCOUNT
+  PRO
+}
+
+Enum SubscriptionType {
+  FREE
+  PRO
+}
+
+Ref: Subscription.userId - User.id
+
+Ref: AccessLog.userId > User.id

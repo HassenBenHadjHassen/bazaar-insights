@@ -1,0 +1,59 @@
+.termsOfService {
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  border-radius: 5px;
+}
+
+.termsOfService h1 {
+  font-size: 2.5em;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+.termsOfService h2 {
+  font-size: 2em;
+  margin-top: 1.5em;
+}
+
+.termsOfService h3,
+.termsOfService h4 {
+  color: var(--accent-color);
+}
+
+.lastUpdated {
+  font-style: italic;
+  color: #7f8c8d;
+}
+
+.termsOfService ol,
+.termsOfService ul {
+  margin-left: 20px;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+.termsOfService p {
+  margin-bottom: 1em;
+}
+
+.termsOfService a {
+  color: #2980b9;
+  text-decoration: none;
+}
+
+.termsOfService a:hover {
+  text-decoration: underline;
+}
+
+.termsOfService ol li {
+  margin-left: 20px;
+}
+
+.termsOfService ul li {
+  font-size: 0.95rem;
+  margin-left: 20px;
+  padding: 5px;
+  font-weight: 300;
+}

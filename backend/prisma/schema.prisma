@@ -1,0 +1,69 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// generator dbml {
+//   provider = "prisma-dbml-generator"
+// }
+
+datasource db {
+  provider = "mongodb"
+  url      = "mongodb+srv://razills:Ha963214785@cluster0.ot6rb.mongodb.net/bazaar?retryWrites=true&w=majority&appName=Cluster0"
+}
+
+model User {
+  id                   String         @id @default(uuid()) @map("_id") @db.ObjectId // Unique identifier
+  username             String         @unique
+  email                String         @unique
+  passwordHash         String         // Store hashed password
+  role                 Role           // Enum for 'Guest', 'Account', 'Pro'
+  dailyUsageTime       Int            @default(0)  // Time spent in minutes
+  dailyFilterAttempts  Int            @default(0)  // Number of filter attempts
+  lastLogin            DateTime       // Track last login
+  createdAt            DateTime       @default(now())
+  updatedAt            DateTime       @updatedAt
+
+  ipAddress            String?        // Store IP address for tracking
+  filterAttemptsToday  Int            @default(0)  // Count of filter attempts for the current day
+  lastActivity         DateTime?      // Timestamp of the last activity
+  
+  AccessLogs           AccessLog[]    // Relationship to access logs
+  Subscription         Subscription?   // Optional relation, only one active subscription at a time
+}
+
+enum Role {
+  GUEST
+  ACCOUNT
+  PRO
+}
+
+model Subscription {
+  id        String         @id @default(uuid()) @map("_id")
+  userId    String         @unique @db.ObjectId  // Each user can only have one active subscription
+  type      SubscriptionType
+  startDate DateTime
+  endDate   DateTime?       // Optional for free users
+  isActive  Boolean         @default(true)
+
+  user      User            @relation(fields: [userId], references: [id])
+}
+
+enum SubscriptionType {
+  FREE
+  PRO
+}
+
+model AccessLog {
+  id          String   @id @default(uuid()) @map("_id")
+  userId      String   @db.ObjectId // Foreign key to User model
+  date        DateTime @default(now())  // Track the date when the log was created
+  duration    Int      @default(0)      // Duration of usage in minutes
+  filtersUsed Int      @default(0)      // Number of filters used during the session
+
+  user        User     @relation(fields: [userId], references: [id])
+
+  @@index([userId])   // Index on userId for faster querying
+}

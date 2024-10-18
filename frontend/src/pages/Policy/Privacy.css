@@ -1,0 +1,10 @@
+.privacy_list {
+  list-style-type: none;
+}
+
+.privacy_list > li {
+  font-size: 0.95rem;
+  margin-left: 20px;
+  padding: 5px;
+  font-weight: 300;
+}

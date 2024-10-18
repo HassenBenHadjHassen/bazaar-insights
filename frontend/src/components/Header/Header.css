@@ -1,0 +1,58 @@
+.header {
+  display: flex;
+  align-items: center;
+  padding: 10px 30px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  justify-content: space-between;
+  height: 9.5vh;
+  flex-shrink: 0;
+}
+
+.logo {
+  height: 70px;
+  flex: 0 0 auto;
+  cursor: pointer;
+}
+
+.header h1 {
+  text-align: center;
+  cursor: text;
+}
+
+.header-button {
+  padding: 10px 20px;
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+  .header {
+    padding: 10px 15px;
+  }
+
+  h1 {
+    font-size: 1.2rem;
+  }
+
+  .logo {
+    height: 40px;
+  }
+
+  .header-button {
+    font-size: 0.9rem;
+  }
+}
+
+/* For mobile devices */
+@media (max-width: 480px) {
+  .header h1 {
+    font-size: 1.25rem;
+  }
+
+  .logo {
+    height: 35px;
+  }
+
+  .header-button {
+    font-size: 0.8rem;
+  }
+}

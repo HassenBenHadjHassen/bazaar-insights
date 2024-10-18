@@ -1,0 +1,71 @@
+.homepage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  height: 90.5vh;
+}
+
+.homepage_header {
+  margin-top: 3rem;
+  font-size: 3rem;
+  font-weight: 500;
+  letter-spacing: 1px;
+  line-height: 125%;
+  cursor: text;
+}
+
+.homepage_subheader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-size: 1.5rem;
+  font-weight: 300;
+  line-height: 115%;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+  cursor: text;
+}
+
+.homepage_subheader > span:nth-child(2) {
+  font-size: 1.25rem;
+  font-weight: 500;
+  letter-spacing: 1px;
+}
+
+.homepage_boxes {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  width: 100%;
+}
+
+.homepage_trynow {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.homepage_trynow > button {
+  padding: 20px 5rem;
+  font-size: 1.5rem;
+}
+
+.homepage_trynow > p {
+  font-size: 0.75rem;
+  color: gray;
+  font-style: italic;
+}
+
+.homepage_line_chart {
+  position: absolute;
+  width: 40%;
+  left: 0;
+  bottom: 0;
+  z-index: -1;
+}
