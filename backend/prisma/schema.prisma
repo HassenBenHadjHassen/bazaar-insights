@@ -15,7 +15,7 @@ model User {
   email                String         @unique
   fullName             String
   password         String         // Store hashed password
-  role                 Role           // Enum for 'Guest', 'Account', 'Pro'
+  role                 Role           // Enum for 'Account' and 'Pro'
   dailyUsageTime       Int            @default(0)  // Time spent in minutes
   dailyFilterAttempts  Int            @default(0)  // Number of filter attempts
   lastLogin            DateTime       // Track last login
@@ -31,7 +31,6 @@ model User {
 }
 
 enum Role {
-  GUEST
   ACCOUNT
   PRO
 }

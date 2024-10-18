@@ -5,6 +5,7 @@ import { UserUseCase } from "../useCases/UserUseCase";
 import { UserRegisterModel } from "../models/UserRegister";
 import { UserLoginModel } from "../models/UserLogin";
 import { loginRateLimiter } from "../middlewares/RateLimiter";
+import { STATUS_CODES } from "../utils/constants";
 
 @controller("/users")
 export class UserController {
@@ -22,9 +23,11 @@ export class UserController {
           message: result.message,
         });
       } else {
-        res.status(result.statusCode || 500).json({
-          message: result.message,
-        });
+        res
+          .status(result.statusCode || STATUS_CODES.INTERNAL_SERVER_ERROR)
+          .json({
+            message: result.message,
+          });
       }
     } catch (error) {
       next(error);
@@ -43,9 +46,11 @@ export class UserController {
           message: result.message,
         });
       } else {
-        res.status(result.statusCode || 500).json({
-          message: result.message,
-        });
+        res
+          .status(result.statusCode || STATUS_CODES.INTERNAL_SERVER_ERROR)
+          .json({
+            message: result.message,
+          });
       }
     } catch (error) {
       next(error);

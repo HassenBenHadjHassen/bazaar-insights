@@ -1,7 +1,11 @@
 import "./Homepage.css";
 import HomePageInfoBox from "../../components/HomePageInfoBox/HomePageInfoBox";
+import { useNavigate } from "react-router-dom";
+import { handleRedirect } from "../../utils/handleRedirect";
 
 const Homepage = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="homepage">
       <span className="homepage_header">
@@ -23,7 +27,7 @@ const Homepage = () => {
       </div>
 
       <div className="homepage_trynow">
-        <button>Try now for free</button>
+        <button onClick={() => navigate("/guest")}>Try now for free</button>
         <p>*No Subscription Required*</p>
       </div>
 

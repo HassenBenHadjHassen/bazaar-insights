@@ -216,9 +216,9 @@ const Signuppage = () => {
           <div className="benefits_section">
             <h3 className="benefits_title">Benefits of Joining</h3>
             <ul className="benefits_list">
-              <li>Access to exclusive content</li>
-              <li>Receive regular updates</li>
-              <li>Join a community of professionals</li>
+              <li>Access More Products</li>
+              <li>Real-Time Updates</li>
+              <li>Customizable Filters</li>
             </ul>
           </div>
         </div>

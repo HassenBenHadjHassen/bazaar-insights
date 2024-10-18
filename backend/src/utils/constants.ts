@@ -11,4 +11,6 @@ export const MESSAGES = {
   USER_REGISTERED: "User registered successfully",
   INVALID_CREDENTIALS: "Invalid credentials",
   INTERNAL_ERROR: "Internal server error",
+  UNEXPECTED_ERROR: "Unexpected error occurred",
+  FETCH_FAILED: "Failed to fetch bazaar products",
 };

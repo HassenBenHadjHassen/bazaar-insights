@@ -1,5 +1,4 @@
 export enum Role {
-  GUEST = "GUEST",
   ACCOUNT = "ACCOUNT",
   PRO = "PRO",
 }

@@ -1,57 +1,48 @@
-import axios from "../utils/axios";
+import { injectable } from "inversify";
 import {
   BazaarData,
-  Products,
+  BazaarProducts,
+  FilterCondition,
+  FilterParams,
   Item,
   Items,
-  BazaarProducts,
-  FilterParams,
-  FilterCondition,
-} from "../utils/types";
+  Products,
+} from "../types/ItemTypes";
+import axios from "../utils/axios";
 
-export class Hypixel {
-  private static instance: Hypixel;
+@injectable()
+export class ItemsUseCase {
+  private ITEMS_API_ENDPOINT = "/v2/resources/skyblock/items";
+  private BAZAAE_API_ENDPOINT = "/v2/skyblock/bazaar";
 
-  static getInstance = (): Hypixel => {
-    if (this.instance) {
-      return this.instance;
-    }
-
-    this.instance = new Hypixel();
-    return this.instance;
-  };
-
-  private fetchHypixelItems = async (): Promise<Item[] | null> => {
+  private async fetchItems(): Promise<Item[] | null> {
     try {
-      const itemsResponse = await axios.get<Items>(
-        "/v2/resources/skyblock/items"
-      );
-
+      const itemsResponse = await axios.get<Items>(this.ITEMS_API_ENDPOINT);
       return itemsResponse.data.items;
     } catch (error) {
       console.error("Unexpected error:", error);
       return null;
     }
-  };
+  }
 
-  private fetchBazaarData = async (): Promise<Products | null> => {
+  private async fetchBazaarData(): Promise<Products | null> {
     try {
-      const bazaarResponse = await axios.get<BazaarData>("/v2/skyblock/bazaar");
-
+      const bazaarResponse = await axios.get<BazaarData>(
+        this.BAZAAE_API_ENDPOINT
+      );
       return bazaarResponse.data.products;
     } catch (error) {
       console.error("Unexpected error:", error);
       return null;
     }
-  };
+  }
 
-  private extractItemNames = async (
+  private async extractItemNames(
     bazaarData: Products
-  ): Promise<Map<string, string> | null> => {
-    const items = await this.fetchHypixelItems();
-    if (!items) {
-      return null;
-    }
+  ): Promise<Map<string, string> | null> {
+    const items = await this.fetchItems();
+    if (!items) return null;
+
     const validProductIds = new Set(Object.keys(bazaarData));
     const result = new Map<string, string>();
 
@@ -62,7 +53,7 @@ export class Hypixel {
     }
 
     return result;
-  };
+  }
 
   private formatEnchanted(input: string): string {
     return input
@@ -72,16 +63,12 @@ export class Hypixel {
       .replace(/\bEnchantment\b/i, "Enchanted");
   }
 
-  bazaarProducts = async (): Promise<BazaarProducts[] | null> => {
+  private async getBazaarProducts(): Promise<BazaarProducts[] | null> {
     const bazaarData = await this.fetchBazaarData();
-    if (!bazaarData) {
-      return null;
-    }
+    if (!bazaarData) return null;
 
     const itemNames = await this.extractItemNames(bazaarData);
-    if (!itemNames) {
-      return null;
-    }
+    if (!itemNames) return null;
 
     const result: BazaarProducts[] = [];
 
@@ -110,7 +97,7 @@ export class Hypixel {
     }
 
     return result;
-  };
+  }
 
   private compareValues(
     productValue: number,
@@ -128,13 +115,11 @@ export class Hypixel {
     }
   }
 
-  getFilteredBazaarProducts = async (
+  public async getFilteredBazaarProducts(
     filters: FilterParams
-  ): Promise<BazaarProducts[] | null> => {
-    const products = await this.bazaarProducts();
-    if (!products) {
-      return null;
-    }
+  ): Promise<BazaarProducts[] | null> {
+    const products = await this.getBazaarProducts();
+    if (!products) return null;
 
     return products.filter(
       (product) =>
@@ -153,5 +138,5 @@ export class Hypixel {
         this.compareValues(product.profit, filters.profitFilter) &&
         this.compareValues(product.profitMargin, filters.profitMarginFilter)
     );
-  };
+  }
 }

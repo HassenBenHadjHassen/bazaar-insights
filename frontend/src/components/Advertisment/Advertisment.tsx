@@ -12,7 +12,7 @@ interface atOptionsProps {
   atOptions: AdOptions;
 }
 
-const Banner: React.FC<atOptionsProps> = ({ atOptions }) => {
+const Advertisment: React.FC<atOptionsProps> = ({ atOptions }) => {
   const banner = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -31,4 +31,4 @@ const Banner: React.FC<atOptionsProps> = ({ atOptions }) => {
   return <div ref={banner}></div>;
 };
 
-export default Banner;
+export default Advertisment;

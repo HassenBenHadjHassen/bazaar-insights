@@ -1,0 +1,175 @@
+.guestview {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  text-align: center;
+  background-color: var(--background-color);
+}
+
+.guestview_header {
+  background-color: var(--primary-color-opacity);
+  padding: 20px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.guestview_header h1 {
+  font-size: 2rem;
+  color: var(--text-color);
+  letter-spacing: 1px;
+}
+
+.guestview_header p {
+  color: var(--text-color);
+  margin-top: 10px;
+}
+
+.guestview_products {
+  margin: 20px 0;
+}
+
+.guestview_products h2 {
+  font-size: 1.5rem;
+  color: var(--text-color);
+  margin-bottom: 20px;
+  letter-spacing: 1px;
+}
+
+.guestview_products_list {
+  display: flex;
+  justify-content: space-around;
+}
+.guestview_product_card {
+  background-color: var(--secondary-color);
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  border-radius: 10px;
+  width: 30%;
+  text-align: left;
+  transition: transform 0.2s;
+  cursor: pointer;
+}
+
+.guestview_product_card:hover {
+  transform: translateY(-5px);
+}
+
+.guestview_product_card img {
+  display: block; /* Center the image */
+  margin: 0 auto 15px; /* Center with margin below */
+  width: 80%; /* Slightly larger image */
+  border-radius: 10px; /* Match border radius with card */
+}
+
+.guestview_product_card h3 {
+  margin-bottom: 10px;
+  font-size: 1.4rem; /* Increased font size for title */
+  color: var(--accent-color);
+  letter-spacing: 1px;
+  font-weight: bold; /* Added font weight for emphasis */
+}
+
+.guestview_product_card p {
+  color: var(--text-color);
+  font-size: 1rem;
+  margin: 5px 0; /* Uniform margin for paragraphs */
+  line-height: 1.5; /* Improved readability with line height */
+}
+
+.guestview_product_card .price {
+  font-weight: bold; /* Emphasize price information */
+  color: var(--price-color); /* Use a specific color for prices */
+}
+
+.guestview_filters {
+  margin: 20px 0;
+}
+
+.guestview_filters h2 {
+  font-size: 1.5rem;
+  color: var(--text-color);
+  margin-bottom: 15px;
+}
+
+.guestview_filters p:not(.guestview_filter_warning) {
+  font-size: 1rem;
+  color: var(--text-color);
+}
+
+.guestview_filter_button {
+  background-color: var(--primary-color);
+  color: var(--text-color);
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.guestview_filter_button:hover {
+  background-color: var(--accent-color);
+}
+
+.guestview_filter_warning {
+  color: var(--accent-color);
+  margin-top: 10px;
+}
+
+.guestview_timer {
+  background-color: var(--secondary-color);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  text-align: center;
+  margin: 20px 0;
+}
+
+.guestview_timer h2 {
+  font-size: 1.5rem;
+  color: var(--accent-color);
+  margin-bottom: 15px;
+}
+
+.timer {
+  font-size: 2rem; /* Larger font size for visibility */
+  font-weight: bold;
+  color: var(--highlight-color); /* Highlight color for the timer */
+  margin: 10px 0;
+}
+
+.guestview_timer p {
+  color: var(--text-color);
+  font-size: 1rem;
+  margin-top: 10px;
+}
+
+.guestview_signin {
+  background-color: var(--primary-color-opacity);
+  padding: 20px;
+  border-radius: 8px;
+  margin-top: 30px;
+}
+
+.guestview_signin h2 {
+  font-size: 1.5rem;
+  color: var(--text-color);
+  margin-bottom: 15px;
+}
+
+.guestview_signin p {
+  font-size: 1rem;
+  color: var(--text-color);
+}
+
+.guestview_signin a {
+  color: var(--accent-color);
+  text-decoration: none;
+}
+
+.guestview_signin a:hover {
+  text-decoration: underline;
+}
+
+.guestview_advertisment {
+  margin-top: 10px;
+}

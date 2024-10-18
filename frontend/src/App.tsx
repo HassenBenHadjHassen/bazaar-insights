@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import { Hypixel } from "./Data/Hypixel";
+import { useState } from "react";
 import { BazaarProducts, FilterParams } from "./utils/types";
 import "./App.css";
 import Template from "./components/Template/Template";
@@ -13,123 +12,50 @@ import RouteError from "./components/RouteError/RouteError";
 import Terms from "./pages/Terms/Terms";
 import Privacy from "./pages/Policy/Policy";
 import ForgotPassword from "./pages/ForgotPassword/ForgotPassword";
+import Guestpage from "./pages/GuestView/Guestpage";
+
+const page = (
+  path: string,
+  Page: React.ReactElement<any, string | React.JSXElementConstructor<any>>,
+  pageName: string,
+  headerButtonText: string,
+  buttonLink: string
+) => {
+  return {
+    path,
+    errorElement: (
+      <Template
+        Page={<RouteError />}
+        pageName="Error"
+        headerButtonText="Login/Signup"
+        buttonLink="/login"
+      />
+    ),
+    element: (
+      <Template
+        Page={Page}
+        pageName={pageName}
+        headerButtonText={headerButtonText}
+        buttonLink={buttonLink}
+      />
+    ),
+  };
+};
 
 export const router = createBrowserRouter([
-  {
-    path: "/",
-    errorElement: (
-      <Template
-        Page={<RouteError />}
-        pageName="Error"
-        headerButtonText="Login/Signup"
-        buttonLink="/login"
-      />
-    ),
-    element: (
-      <Template
-        Page={<Homepage />}
-        pageName="Homepage"
-        headerButtonText={"Login/Signup"}
-        buttonLink="/login"
-      />
-    ),
-  },
-  {
-    path: "/login",
-    errorElement: (
-      <Template
-        Page={<RouteError />}
-        pageName="Error"
-        headerButtonText="Login/Signup"
-        buttonLink="/login"
-      />
-    ),
-    element: (
-      <Template
-        Page={<Loginpage />}
-        pageName="Login"
-        headerButtonText="Login/Signup"
-        buttonLink="/login"
-      />
-    ),
-  },
-  {
-    path: "/sign-up",
-    errorElement: (
-      <Template
-        Page={<RouteError />}
-        pageName="Error"
-        headerButtonText="Login/Signup"
-        buttonLink="/login"
-      />
-    ),
-    element: (
-      <Template
-        Page={<Signuppage />}
-        pageName="Signup"
-        headerButtonText="Login/Signup"
-        buttonLink="/login"
-      />
-    ),
-  },
-
-  {
-    path: "/terms",
-    errorElement: (
-      <Template
-        Page={<RouteError />}
-        pageName="Error"
-        headerButtonText="Login/Signup"
-        buttonLink="/login"
-      />
-    ),
-    element: (
-      <Template
-        Page={<Terms />}
-        pageName="Terms Of Service"
-        headerButtonText="Login/Signup"
-        buttonLink="/login"
-      />
-    ),
-  },
-  {
-    path: "/privacy",
-    errorElement: (
-      <Template
-        Page={<RouteError />}
-        pageName="Error"
-        headerButtonText="Login/Signup"
-        buttonLink="/login"
-      />
-    ),
-    element: (
-      <Template
-        Page={<Privacy />}
-        pageName="Privacy Policy"
-        headerButtonText="Login/Signup"
-        buttonLink="/login"
-      />
-    ),
-  },
-  {
-    path: "/forgot-password",
-    errorElement: (
-      <Template
-        Page={<RouteError />}
-        pageName="Error"
-        headerButtonText="Login/Signup"
-        buttonLink="/login"
-      />
-    ),
-    element: (
-      <Template
-        Page={<ForgotPassword />}
-        pageName="Forgot Password"
-        headerButtonText="Login/Signup"
-        buttonLink="/login"
-      />
-    ),
-  },
+  page("/", <Homepage />, "Homepage", "Login/Signup", "/login"),
+  page("/login", <Loginpage />, "Login", "Login/Signup", "/login"),
+  page("/sign-up", <Signuppage />, "Signup", "Login/Signup", "/login"),
+  page("/terms", <Terms />, "Terms Of Service", "Login/Signup", "/login"),
+  page("/privacy", <Privacy />, "Privacy Policy", "Login/Signup", "/login"),
+  page(
+    "/forgot-password",
+    <ForgotPassword />,
+    "Forgot Password",
+    "Login/Signup",
+    "/login"
+  ),
+  page("/guest", <Guestpage />, "Guest User", "Login/Signup", "/login"),
 ]);
 
 const App = () => {
