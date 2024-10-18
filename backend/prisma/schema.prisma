@@ -2,12 +2,8 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider = "prisma-client-js"  
 }
-
-// generator dbml {
-//   provider = "prisma-dbml-generator"
-// }
 
 datasource db {
   provider = "mongodb"
@@ -15,10 +11,10 @@ datasource db {
 }
 
 model User {
-  id                   String         @id @default(uuid()) @map("_id") @db.ObjectId // Unique identifier
-  username             String         @unique
+  id                   String         @id @default(auto()) @map("_id") @db.ObjectId // Unique identifier
   email                String         @unique
-  passwordHash         String         // Store hashed password
+  fullName             String
+  password         String         // Store hashed password
   role                 Role           // Enum for 'Guest', 'Account', 'Pro'
   dailyUsageTime       Int            @default(0)  // Time spent in minutes
   dailyFilterAttempts  Int            @default(0)  // Number of filter attempts
@@ -26,7 +22,7 @@ model User {
   createdAt            DateTime       @default(now())
   updatedAt            DateTime       @updatedAt
 
-  ipAddress            String?        // Store IP address for tracking
+  ipAddress            String        // Store IP address for tracking
   filterAttemptsToday  Int            @default(0)  // Count of filter attempts for the current day
   lastActivity         DateTime?      // Timestamp of the last activity
   

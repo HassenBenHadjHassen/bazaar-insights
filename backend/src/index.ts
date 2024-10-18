@@ -12,7 +12,6 @@ const datasource = new Datasource();
 async function startServer() {
   try {
     await datasource.connect();
-    console.log("Connected to the database");
 
     app.listen(PORT, () => {
       console.log(`Server is running on port ${PORT}`);
@@ -25,8 +24,8 @@ async function startServer() {
 
 process.on("SIGINT", async () => {
   try {
-    await datasource.disconnect();
-    console.log("Gracefully disconnected from the database");
+    console.log("SIGINT detected");
+    await datasource.disconnect("SIGINT");
     process.exit(0);
   } catch (error) {
     console.error("Error during disconnect:", error);
@@ -34,4 +33,8 @@ process.on("SIGINT", async () => {
   }
 });
 
-startServer();
+startServer().catch(async (e) => {
+  await datasource.disconnect("catch");
+  console.error(e);
+  process.exit(1);
+});

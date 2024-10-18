@@ -1,13 +1,34 @@
 import { Request, Response, NextFunction } from "express";
-import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import { controller, httpGet } from "inversify-express-utils";
+import { controller, httpGet, httpPost } from "inversify-express-utils";
 import { inject } from "inversify";
 import { UserUseCase } from "../useCases/UserUseCase";
+import { UserRegisterModel } from "../models/UserRegister";
 
 @controller("/users")
 export class UserController {
   constructor(@inject(UserUseCase) private userUseCase: UserUseCase) {}
+
+  @httpPost("/register")
+  async registerUser(req: Request, res: Response, next: NextFunction) {
+    try {
+      const userData: UserRegisterModel = req.body;
+
+      const result = await this.userUseCase.registerUser(userData);
+
+      if (result.success) {
+        res.status(result.statusCode).json({
+          message: result.message,
+        });
+      } else {
+        res.status(result.statusCode || 500).json({
+          message: result.message,
+        });
+      }
+    } catch (error) {
+      next(error);
+    }
+  }
 
   @httpGet("/")
   async getUsers(_: Request, res: Response) {
@@ -16,29 +37,6 @@ export class UserController {
     return res.json(users);
   }
 }
-
-// export const register = async (
-//   req: Request,
-//   res: Response,
-//   next: NextFunction
-// ) => {
-//   try {
-//     const { name, email, password } = req.body;
-//     const hashedPassword = await bcrypt.hash(password, 10);
-//     const user = await prisma.user.create({
-//       data: {
-//         name,
-//         email,
-//         password: hashedPassword,
-//       },
-//     });
-//     res
-//       .status(201)
-//       .json({ message: "User created successfully", userId: user.id });
-//   } catch (error) {
-//     next(error);
-//   }
-// };
 
 // export const login = async (
 //   req: Request,
