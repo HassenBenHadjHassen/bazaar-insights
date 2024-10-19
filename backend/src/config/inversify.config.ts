@@ -7,10 +7,15 @@ import { ItemsController } from "../controllers/ItemsController";
 
 const container = new Container();
 
+/* Controllers */
 container.bind<UserController>(UserController).toSelf();
 container.bind<ItemsController>(ItemsController).toSelf();
+
+/* UseCases */
 container.bind<UserUseCase>(UserUseCase).toSelf();
 container.bind<ItemsUseCase>(ItemsUseCase).toSelf();
+
+/* Datasource */
 container.bind<Datasource>(Datasource).toSelf();
 
 export default container;

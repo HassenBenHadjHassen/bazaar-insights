@@ -10,9 +10,15 @@ interface AdOptions {
 
 interface atOptionsProps {
   atOptions: AdOptions;
+  className?: string;
+  style?: React.CSSProperties;
 }
 
-const Advertisment: React.FC<atOptionsProps> = ({ atOptions }) => {
+const Advertisment: React.FC<atOptionsProps> = ({
+  atOptions,
+  className,
+  style,
+}) => {
   const banner = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -28,7 +34,7 @@ const Advertisment: React.FC<atOptionsProps> = ({ atOptions }) => {
     }
   }, [banner]);
 
-  return <div ref={banner}></div>;
+  return <div style={style} className={className} ref={banner}></div>;
 };
 
 export default Advertisment;

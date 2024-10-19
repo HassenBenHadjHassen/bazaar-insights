@@ -3,9 +3,11 @@ import "./Loginpage.css";
 import { useNavigate } from "react-router-dom";
 import { handleRedirect } from "../../utils/handleRedirect";
 import { validateEmail, validatePassword } from "../../utils/validations";
+import { useAuth } from "../../hooks/AuthHook";
 
 const Loginpage = () => {
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const [formData, setFormData] = useState({
     email: "",
@@ -45,15 +47,31 @@ const Loginpage = () => {
       ...formData,
       [name]: value,
     });
+
+    setErrors({ email: "", password: "" });
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (validateForm()) {
-      console.log("Form submitted:", formData);
-      // Proceed with form submission
-    } else {
-      console.log("Form validation failed.");
+      const response = await login(formData.email, formData.password);
+
+      if (response?.success) {
+        setErrors({
+          email: "",
+          password: "",
+        });
+
+        setFormData({
+          email: "",
+          password: "",
+        });
+      } else {
+        setErrors({
+          email: "",
+          password: response?.data ?? "",
+        });
+      }
     }
   };
 

@@ -45,10 +45,18 @@ export class Datasource {
   public createUser = async (userData: CreateUserInput) => {
     try {
       if (this.prisma) {
-        const user = await this.prisma.user.create({ data: { ...userData } });
-        console.log(user);
-      } else {
-        console.log("Prisma not found");
+        await this.prisma.user.create({ data: { ...userData } });
+      }
+    } catch (error) {
+      console.error("Failed to create user:", error);
+      throw error;
+    }
+  };
+
+  public getAllUsers = async () => {
+    try {
+      if (this.prisma) {
+        return await this.prisma.user.findMany();
       }
     } catch (error) {
       console.error("Failed to create user:", error);
@@ -65,5 +73,18 @@ export class Datasource {
       console.error("Failed to find user:", error);
       throw error;
     }
+  };
+
+  savePasswordResetToken = async (
+    userId: string,
+    token: string
+  ): Promise<void> => {
+    await this.prisma.passwordResetToken.create({
+      data: {
+        userId: userId,
+        token: token,
+        expiresAt: new Date(Date.now() + 60 * 60 * 1000),
+      },
+    });
   };
 }

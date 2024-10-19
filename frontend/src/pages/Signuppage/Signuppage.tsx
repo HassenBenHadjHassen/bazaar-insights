@@ -3,9 +3,12 @@ import "./signuppage.css";
 import { handleRedirect } from "../../utils/handleRedirect";
 import { useNavigate } from "react-router-dom";
 import { validateEmail, validatePassword } from "../../utils/validations";
+import { useAuth } from "../../hooks/AuthHook";
 
 const Signuppage = () => {
   const navigate = useNavigate();
+
+  const { register } = useAuth();
 
   const [formData, setFormData] = useState({
     fullName: "",
@@ -19,6 +22,7 @@ const Signuppage = () => {
     email: "",
     password: "",
     repeatPassword: "",
+    global: "",
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -32,7 +36,7 @@ const Signuppage = () => {
 
   const validateForm = () => {
     let isValid = true;
-    let errors = { email: "", password: "", repeatPassword: "" };
+    let errors = { email: "", password: "", repeatPassword: "", global: "" };
 
     // Email validation
     if (!formData.email || !validateEmail(formData.email)) {
@@ -57,13 +61,34 @@ const Signuppage = () => {
     return isValid;
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (validateForm()) {
-      console.log("Form submitted:", formData);
-      // Proceed with form submission
-    } else {
-      console.log("Form validation failed.");
+      const response = await register(
+        formData.fullName,
+        formData.email,
+        formData.password
+      );
+
+      if (response?.success) {
+        setErrors({ email: "", password: "", repeatPassword: "", global: "" });
+        setFormData({
+          fullName: "",
+          email: "",
+          password: "",
+          repeatPassword: "",
+          agreement: true,
+        });
+
+        navigate("/login");
+      } else {
+        setErrors({
+          email: "",
+          password: "",
+          repeatPassword: "",
+          global: response?.data ?? "",
+        });
+      }
     }
   };
 
@@ -211,6 +236,12 @@ const Signuppage = () => {
             <div className="signup_inputBox">
               <button type="submit">Submit</button>
             </div>
+
+            {errors.global && (
+              <p className="signup_error" style={{ textAlign: "center" }}>
+                {errors.global}
+              </p>
+            )}
           </form>
 
           <div className="benefits_section">

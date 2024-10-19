@@ -28,11 +28,23 @@ model User {
   
   AccessLogs           AccessLog[]    // Relationship to access logs
   Subscription         Subscription?   // Optional relation, only one active subscription at a time
+  PasswordResetTokens  PasswordResetToken[]  // Relationship to password reset tokens
 }
 
 enum Role {
   ACCOUNT
   PRO
+}
+
+model PasswordResetToken {
+  id        String     @id @default(uuid()) @map("_id")
+  userId    String     @db.ObjectId
+  token     String     // The reset token
+  expiresAt DateTime   // When the token expires
+
+  user      User       @relation(fields: [userId], references: [id])
+
+  @@index([userId])    // Index on userId for faster querying
 }
 
 model Subscription {

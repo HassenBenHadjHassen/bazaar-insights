@@ -56,4 +56,48 @@ export class UserController {
       next(error);
     }
   }
+
+  @httpPost("/reset-password")
+  async recoverUserPassword(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { email } = req.body;
+
+      const result = await this.userUseCase.recoverPassword(email);
+
+      if (result.success) {
+        res.status(result.statusCode).json({
+          message: result.message,
+        });
+      } else {
+        res
+          .status(result.statusCode || STATUS_CODES.INTERNAL_SERVER_ERROR)
+          .json({
+            message: result.message,
+          });
+      }
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  @httpGet("/")
+  async getAllUsers(req: Request, res: Response, next: NextFunction) {
+    try {
+      const result = await this.userUseCase.getAllUsers();
+
+      if (result.success) {
+        res.status(result.statusCode).json({
+          message: result.message,
+        });
+      } else {
+        res
+          .status(result.statusCode || STATUS_CODES.INTERNAL_SERVER_ERROR)
+          .json({
+            message: result.message,
+          });
+      }
+    } catch (error) {
+      next(error);
+    }
+  }
 }

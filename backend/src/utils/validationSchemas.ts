@@ -21,3 +21,5 @@ export const userLoginSchema = Joi.object({
     ) // At least 1 uppercase, 1 lowercase, 1 digit, 1 special character
     .required(),
 });
+
+export const userPasswordRecoverSchema = Joi.string().email().required();

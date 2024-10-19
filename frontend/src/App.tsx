@@ -13,49 +13,30 @@ import Terms from "./pages/Terms/Terms";
 import Privacy from "./pages/Policy/Policy";
 import ForgotPassword from "./pages/ForgotPassword/ForgotPassword";
 import Guestpage from "./pages/GuestView/Guestpage";
+import { AuthProvider } from "./context/AuthContext";
+import Accountpage from "./pages/Accountpage/Accountpage";
 
 const page = (
   path: string,
   Page: React.ReactElement<any, string | React.JSXElementConstructor<any>>,
-  pageName: string,
-  headerButtonText: string,
-  buttonLink: string
+  pageName: string
 ) => {
   return {
     path,
-    errorElement: (
-      <Template
-        Page={<RouteError />}
-        pageName="Error"
-        headerButtonText="Login/Signup"
-        buttonLink="/login"
-      />
-    ),
-    element: (
-      <Template
-        Page={Page}
-        pageName={pageName}
-        headerButtonText={headerButtonText}
-        buttonLink={buttonLink}
-      />
-    ),
+    errorElement: <Template Page={<RouteError />} pageName="Error" />,
+    element: <Template Page={Page} pageName={pageName} />,
   };
 };
 
 export const router = createBrowserRouter([
-  page("/", <Homepage />, "Homepage", "Login/Signup", "/login"),
-  page("/login", <Loginpage />, "Login", "Login/Signup", "/login"),
-  page("/sign-up", <Signuppage />, "Signup", "Login/Signup", "/login"),
-  page("/terms", <Terms />, "Terms Of Service", "Login/Signup", "/login"),
-  page("/privacy", <Privacy />, "Privacy Policy", "Login/Signup", "/login"),
-  page(
-    "/forgot-password",
-    <ForgotPassword />,
-    "Forgot Password",
-    "Login/Signup",
-    "/login"
-  ),
-  page("/guest", <Guestpage />, "Guest User", "Login/Signup", "/login"),
+  page("/", <Homepage />, "Homepage"),
+  page("/login", <Loginpage />, "Login"),
+  page("/sign-up", <Signuppage />, "Signup"),
+  page("/terms", <Terms />, "Terms Of Service"),
+  page("/privacy", <Privacy />, "Privacy Policy"),
+  page("/forgot-password", <ForgotPassword />, "Forgot Password"),
+  page("/guest", <Guestpage />, "Guest"),
+  page("/account", <Accountpage />, "Account"),
 ]);
 
 const App = () => {
@@ -88,7 +69,9 @@ const App = () => {
   return (
     <React.StrictMode>
       <ErrorBoundary>
-        <RouterProvider router={router} />
+        <AuthProvider>
+          <RouterProvider router={router} />
+        </AuthProvider>
       </ErrorBoundary>
     </React.StrictMode>
   );

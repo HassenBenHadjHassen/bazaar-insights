@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import Advertisment from "../../components/Advertisment/Advertisment";
 
 const Guestpage = () => {
-  const [timeLeft, setTimeLeft] = useState(5);
+  const [timeLeft, setTimeLeft] = useState(600);
   const [filterAttempts, setFilterAttempts] = useState(3);
 
   useEffect(() => {
@@ -83,78 +83,138 @@ const Guestpage = () => {
     params: {},
   };
 
+  const ad3 = {
+    key: "947d6bd4d35d928eafc88b3e26190348",
+    format: "iframe",
+    height: 300,
+    width: 160,
+    params: {},
+  };
+
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.src =
+      "//plainsenlargecoronation.com/7f/b5/de/7fb5de07862442ac82771bdeb1af5dbc.js";
+    script.type = "text/javascript";
+    script.async = true;
+    document.head.appendChild(script);
+
+    return () => {
+      document.head.removeChild(script);
+    };
+  }, []);
+
   return (
-    <div className="guestview">
-      <header className="guestview_header">
-        <h1>Bazaar Insights - Guest View</h1>
-        <p>Sign up to unlock more products and advanced features!</p>
-      </header>
+    <div style={{ display: "flex", flexDirection: "row" }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          flex: "0.5",
+        }}
+      >
+        <Advertisment style={{ marginTop: "3rem" }} atOptions={ad2} />
+      </div>
+      <div className="guestview">
+        <header className="guestview_header">
+          <h1>Bazaar Insights - Guest View</h1>
+          <p>Sign up to unlock more products and advanced features!</p>
+        </header>
 
-      <section className="guestview_products">
-        <h2>Top 3 Bazaar Flip Products</h2>
-        <div className="guestview_products_list">
-          {products.map((product, index) => (
-            <div key={index} className="guestview_product_card">
-              <img src={product.skin} alt={product.name} />
-              <h3>{product.name}</h3>
-              <p className="price">Buy Price: {product.buyPrice} coins</p>
-              <p className="price">Sell Price: {product.sellPrice} coins</p>
-              <p className="price">Profit: {product.profit} coins</p>
-              <p className="price">Profit Margin: {product.profitMargin}%</p>
-              <p>Buy Volume: {product.buyVolume.toLocaleString()} units</p>
-              <p>Sell Volume: {product.sellVolume.toLocaleString()} units</p>
-              <p>
-                Weekly Buy Transactions:{" "}
-                {product.weekBuyTransactionVolume.toLocaleString()} coins
-              </p>
-              <p>
-                Weekly Sell Transactions:{" "}
-                {product.weekSellTransactionVolume.toLocaleString()} coins
-              </p>
-            </div>
-          ))}
-        </div>
-      </section>
+        <section className="guestview_products">
+          <h2>Top 3 Bazaar Flip Products</h2>
+          <div className="guestview_products_list">
+            {products.map((product, index) => (
+              <div
+                key={index}
+                className={
+                  index === 0
+                    ? "guestview_product_card glitch"
+                    : timeLeft === 0
+                    ? "guestview_product_card glitch"
+                    : "guestview_product_card"
+                }
+              >
+                <img src={product.skin} alt={product.name} />
+                <h3>{product.name}</h3>
+                <p className="price">Buy Price: {product.buyPrice} coins</p>
+                <p className="price">Sell Price: {product.sellPrice} coins</p>
+                <p className="price">Profit: {product.profit} coins</p>
+                <p className="price">Profit Margin: {product.profitMargin}%</p>
+                <p>Buy Volume: {product.buyVolume.toLocaleString()} units</p>
+                <p>Sell Volume: {product.sellVolume.toLocaleString()} units</p>
+                <p>
+                  Weekly Buy Transactions:{" "}
+                  {product.weekBuyTransactionVolume.toLocaleString()} coins
+                </p>
+                <p>
+                  Weekly Sell Transactions:{" "}
+                  {product.weekSellTransactionVolume.toLocaleString()} coins
+                </p>
+                {index === 0 && (
+                  <div className="overlay-text">Sign up to see the content</div>
+                )}
+                {index !== 0 && timeLeft === 0 && (
+                  <div className="overlay-text">Sign up to see the content</div>
+                )}
+              </div>
+            ))}
+          </div>
+        </section>
 
-      <section className="guestview_filters">
-        <h2>Filter Options</h2>
-        <p>Remaining Filter Attempts: {filterAttempts}/3</p>
-        <button onClick={handleFilterClick} className="guestview_filter_button">
-          Apply Filter
-        </button>
-        {filterAttempts === 0 && (
-          <p className="guestview_filter_warning">
-            No more filter attempts. <Link to="/sign-up">Sign up</Link> for
-            more.
-          </p>
-        )}
-      </section>
-
-      <section className="guestview_timer">
-        <h2>Daily Access Timer</h2>
-        <div className="timer">
-          {timeLeft > 0 ? (
-            <span className="time">{formatTime(timeLeft)}</span>
-          ) : (
-            <span>Time's up</span>
+        <section className="guestview_filters">
+          <h2>Filter Options</h2>
+          <p>Remaining Filter Attempts: {filterAttempts}/3</p>
+          <button
+            onClick={handleFilterClick}
+            className="guestview_filter_button"
+          >
+            Apply Filter
+          </button>
+          {filterAttempts === 0 && (
+            <p className="guestview_filter_warning">
+              No more filter attempts. <Link to="/sign-up">Sign up</Link> for
+              more.
+            </p>
           )}
+        </section>
+
+        <section className="guestview_timer">
+          <h2>Daily Access Timer</h2>
+          <div className="timer">
+            {timeLeft > 0 ? (
+              <span className="time">{formatTime(timeLeft)}</span>
+            ) : (
+              <span>Time's up</span>
+            )}
+          </div>
+          <p>
+            Sign up to get <b>10 filter</b> attempts and <b>1 hour</b> of daily
+            access!
+          </p>
+        </section>
+
+        <section className="guestview_signin">
+          <h2>Want more features?</h2>
+          <p>
+            <Link to="/sign-up">Sign up now</Link> to unlock exclusive insights,
+            enhanced trading capabilities, and much more!
+          </p>
+        </section>
+
+        <div className="guestview_advertisment">
+          <Advertisment atOptions={ad1} />
         </div>
-        <p>
-          Sign up to get <b>10 filter</b> attempts and <b>1 hour</b> of daily
-          access!
-        </p>
-      </section>
+      </div>
 
-      <section className="guestview_signin">
-        <h2>Want more features?</h2>
-        <p>
-          <Link to="/sign-up">Sign up now</Link> to unlock exclusive insights,
-          enhanced trading capabilities, and much more!
-        </p>
-      </section>
-
-      <div className="guestview_advertisment">
-        <Advertisment atOptions={ad1} />
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          flex: "0.5",
+        }}
+      >
+        <Advertisment style={{ marginTop: "3rem" }} atOptions={ad3} />
       </div>
     </div>
   );

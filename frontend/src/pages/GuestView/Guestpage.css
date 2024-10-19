@@ -4,6 +4,7 @@
   padding: 20px;
   text-align: center;
   background-color: var(--background-color);
+  flex: 1;
 }
 
 .guestview_header {
@@ -172,4 +173,70 @@
 
 .guestview_advertisment {
   margin-top: 10px;
+}
+
+.glitch {
+  position: relative;
+  overflow: hidden; /* Ensure pseudo-elements do not overflow the card */
+}
+
+.glitch:before,
+.glitch:after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%; /* Cover the entire width */
+  height: 100%; /* Cover the entire height */
+  background: url("noise.png") repeat; /* Path to noise texture */
+  background-size: 100%; /* Adjust size of noise texture */
+  opacity: 0.7; /* Adjust visibility */
+  animation: noise-anim 0.15s infinite;
+  clip-path: inset(0); /* Ensure the pseudo-elements cover the card */
+}
+
+.glitch:before {
+  left: 2px; /* Adjust horizontal offset */
+  text-shadow: -1px 0 rgba(255, 0, 0, 0.7); /* Color for glitch effect */
+}
+
+.glitch:after {
+  left: -2px; /* Adjust horizontal offset */
+  text-shadow: 1px 0 rgba(0, 255, 0, 0.7); /* Color for glitch effect */
+}
+
+@keyframes noise-anim {
+  0% {
+    transform: translate(0) scale(1);
+    opacity: 1;
+  }
+  10% {
+    transform: translate(-1px, 0.5px) scale(1.02); /* Reduced translation and scaling */
+    opacity: 0.95; /* Less drop in opacity */
+  }
+  20% {
+    transform: translate(1px, -0.5px) scale(1.02); /* Added a subtle movement */
+    opacity: 0.95; /* Consistent opacity */
+  }
+  30% {
+    transform: translate(0, 1px) scale(1); /* Slight vertical movement */
+    opacity: 1; /* Return to full opacity */
+  }
+  100% {
+    transform: translate(0) scale(1);
+    opacity: 1;
+  }
+}
+
+.overlay-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--accent-color);
+  font-size: 1.5rem;
+  text-align: center;
+  z-index: 1;
+  background-color: #000000c7;
+  border-radius: 8px;
 }
