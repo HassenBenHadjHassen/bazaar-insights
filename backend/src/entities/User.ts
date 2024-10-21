@@ -11,10 +11,6 @@ export class User {
     return this.userData.id;
   }
 
-  public get username() {
-    return this.userData.username;
-  }
-
   public get email() {
     return this.userData.email;
   }
