@@ -7,7 +7,7 @@
   max-width: 10rem;
   background-color: var(--primary-color-opacity);
   border-radius: 8px;
-  box-shadow: var(--box-shadow);
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 4px 6px;
   transition: box-shadow 0.3s ease, transform 0.3s ease;
 }
 

@@ -39,7 +39,7 @@ const Guestpage = () => {
     }
 
     getItems();
-  }, [filters]);
+  }, []);
 
   useEffect(() => {
     const timer = setInterval(() => {

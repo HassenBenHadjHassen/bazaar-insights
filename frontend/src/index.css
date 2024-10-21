@@ -23,6 +23,7 @@
   --background-color: #1e1e1e;
   --text-color: #ffffff;
   --text-color-dark: #212121;
+  --disabled-color: #666;
 }
 
 html {
@@ -61,4 +62,8 @@ button {
 
 button:hover {
   background-color: var(--accent-color);
+}
+
+button:disabled {
+  background-color: var(--disabled-color);
 }

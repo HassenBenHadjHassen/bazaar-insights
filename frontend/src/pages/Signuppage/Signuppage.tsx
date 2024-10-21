@@ -25,6 +25,8 @@ const Signuppage = () => {
     global: "",
   });
 
+  const [disabled, setDisabled] = useState(false);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, type, checked, value } = e.target;
 
@@ -63,7 +65,10 @@ const Signuppage = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     if (validateForm()) {
+      setDisabled(true); // Disable the form during submission
+
       const response = await register(
         formData.fullName,
         formData.email,
@@ -89,6 +94,8 @@ const Signuppage = () => {
           global: response?.data ?? "",
         });
       }
+
+      setDisabled(false); // Re-enable the form after submission
     }
   };
 
@@ -234,7 +241,9 @@ const Signuppage = () => {
             </div>
 
             <div className="signup_inputBox">
-              <button type="submit">Submit</button>
+              <button disabled={disabled} type="submit">
+                Submit
+              </button>
             </div>
 
             {errors.global && (

@@ -19,6 +19,8 @@ const Loginpage = () => {
     password: "",
   });
 
+  const [disabled, setDisabled] = useState(false);
+
   const validateForm = () => {
     let isValid = true;
     let errors = { email: "", password: "" };
@@ -54,6 +56,7 @@ const Loginpage = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (validateForm()) {
+      setDisabled(true);
       const response = await login(formData.email, formData.password);
 
       if (response?.success) {
@@ -75,6 +78,7 @@ const Loginpage = () => {
         });
       }
     }
+    setDisabled(false);
   };
 
   return (
@@ -178,7 +182,9 @@ const Loginpage = () => {
             </div>
 
             <div className="login_inputBox">
-              <button type="submit">Submit</button>
+              <button disabled={disabled} type="submit">
+                Submit
+              </button>
             </div>
           </form>
         </div>
