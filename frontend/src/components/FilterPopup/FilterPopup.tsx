@@ -50,15 +50,17 @@ const FilterPopup: React.FC<FilterPopupProps> = ({
   const viewModel = GuestViewModel.GetInstance();
 
   const handleInputChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) =>
-      viewModel.handleInputChange(e, setFilters),
-    [viewModel, setFilters]
+    (e: React.ChangeEvent<HTMLInputElement>, max: number) => {
+      viewModel.handleInputChange(e, setFilters, max);
+    },
+    []
   );
 
   const resetFilters = useCallback(viewModel.resetFilters, []);
 
   const applyFilters = useCallback(() => {
     viewModel.applyFilters(
+      filters,
       setShowFilterPopup,
       filterAttempts,
       setFilterAttempts,
@@ -71,7 +73,7 @@ const FilterPopup: React.FC<FilterPopupProps> = ({
   const renderFilterRow = (
     label: string,
     name: keyof FilterParams,
-    max: string
+    max: number
   ) => (
     <div className="filterpopup_row" key={name}>
       <label>{label}</label>
@@ -79,9 +81,10 @@ const FilterPopup: React.FC<FilterPopupProps> = ({
         type="range"
         min="0"
         max={max}
+        step="0.1"
         value={filters[name].value}
         name={name}
-        onChange={handleInputChange}
+        onChange={(e) => handleInputChange(e, max)}
       />
       {editing.active && editing.name === name ? (
         <input
@@ -97,7 +100,7 @@ const FilterPopup: React.FC<FilterPopupProps> = ({
           }
           onBlur={() =>
             viewModel.handleEditSave(
-              +max,
+              max,
               editing,
               inputValue,
               inputComparison,
@@ -165,22 +168,22 @@ const FilterPopup: React.FC<FilterPopupProps> = ({
           x
         </span>
       </div>
-      {renderFilterRow("buy Price", "buyPriceFilter", "100000000")}
-      {renderFilterRow("sell Price", "sellPriceFilter", "100000000")}
-      {renderFilterRow("buy Volume", "buyVolumeFilter", "100000000")}
-      {renderFilterRow("sell Volume", "sellVolumeFilter", "100000000")}
+      {renderFilterRow("buy Price", "buyPriceFilter", 100_000_000)}
+      {renderFilterRow("sell Price", "sellPriceFilter", 100_000_000)}
+      {renderFilterRow("buy Volume", "buyVolumeFilter", 100_000_000)}
+      {renderFilterRow("sell Volume", "sellVolumeFilter", 100_000_000)}
       {renderFilterRow(
         "week Buy Transaction Volume",
         "weekBuyTransactionVolumeFilter",
-        "1000000000"
+        100_000_000
       )}
       {renderFilterRow(
         "week Sell Transaction Volume",
         "weekSellTransactionVolumeFilter",
-        "1000000000"
+        100_000_000
       )}
-      {renderFilterRow("profit", "profitFilter", "1000000000")}
-      {renderFilterRow("profit Margin", "profitMarginFilter", "100")}
+      {renderFilterRow("profit", "profitFilter", 100_000_000)}
+      {renderFilterRow("profit Margin", "profitMarginFilter", 100)}
       <div className="filterpopup_buttons">
         <button onClick={() => resetFilters(setFilters)}>Reset Filters</button>
         <button onClick={applyFilters}>Apply Filters</button>

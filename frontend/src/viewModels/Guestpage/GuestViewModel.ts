@@ -1,10 +1,4 @@
-import {
-  getGuest,
-  registerGuest,
-  updateGuest,
-} from "../../services/guestService";
 import { guestItems } from "../../services/itemsService";
-import { GuestInfo } from "../../types/authTypes";
 import {
   BazaarProducts,
   ComparisonType,
@@ -37,39 +31,6 @@ export class GuestViewModel {
     return this.instance;
   };
 
-  // getGuest method
-  public getGuest = async (
-    timeLeft: number,
-    filterAttempts: number,
-    setFilterAttempts: SetState<number>,
-    setTimeLeft: SetState<number>
-  ): Promise<void> => {
-    const guest = await getGuest();
-
-    if (!guest.success) {
-      const data: GuestInfo = JSON.parse(guest.data);
-
-      if (data) {
-        setFilterAttempts(data.filterAttemptsRemaining);
-        setTimeLeft(data.timeRemaining);
-      }
-    } else {
-      await registerGuest(timeLeft, filterAttempts);
-    }
-  };
-
-  public updateGuestFun = async (
-    filterAttemptsRemaining: number,
-    timeRemaining: number
-  ) => {
-    try {
-      await updateGuest(timeRemaining, filterAttemptsRemaining);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  // getGuestItems method
   public getGuestItems = async (
     filters: FilterParams,
     setLoading: SetState<boolean>,
@@ -104,19 +65,41 @@ export class GuestViewModel {
     setShowFilterPopup(!showFilterPopup);
   };
 
-  // handleInputChange method
+  private customSliderValue = (x: number, max: number): number => {
+    const million = 1000000;
+    const normalizedX = x / max; // Normalize x to a value between 0 and 1
+
+    if (normalizedX <= 0.25) {
+      // Quadratic growth from 0 to 3 million
+      return 3 * million * Math.pow(normalizedX / 0.25, 2);
+    } else {
+      // Cubic growth from 3 million to 100 million
+      const adjustedX = (normalizedX - 0.25) / 0.75; // Normalize to 0 - 1 for cubic growth
+      return (
+        3 * million + (100 * million - 3 * million) * Math.pow(adjustedX, 3)
+      );
+    }
+  };
+
   public handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement>,
-    setFilters: SetState<FilterParams>
-  ): void => {
-    const { name, value } = e.target;
-    const filterName = name as keyof FilterParams;
+    setFilters: React.Dispatch<React.SetStateAction<FilterParams>>,
+    max: number
+  ) => {
+    const value = parseFloat(e.target.value);
+    const calculatedValue = this.customSliderValue(value, max);
 
+    // Round to the nearest integer
+    const formattedValue = Math.round(calculatedValue);
+
+    const filterName = e.target.name as keyof FilterParams;
+
+    // Update the filters with the numeric value
     setFilters((prev) => ({
       ...prev,
       [filterName]: {
         ...prev[filterName],
-        value: Number(value),
+        value: formattedValue, // Keep as a number
       },
     }));
   };
@@ -243,6 +226,7 @@ export class GuestViewModel {
 
   // applyFilters method
   public applyFilters = async (
+    filters: FilterParams,
     setShowFilterPopup: React.Dispatch<React.SetStateAction<boolean>>,
     filterAttempts: number,
     setFilterAttempts: React.Dispatch<React.SetStateAction<number>>,
@@ -251,6 +235,6 @@ export class GuestViewModel {
   ): Promise<void> => {
     this.closeFilters(setShowFilterPopup);
     this.handleApplyFilterClick(filterAttempts, setFilterAttempts);
-    await this.getGuestItems(this.DEFAULT_FILTERS, setLoading, setItems);
+    await this.getGuestItems(filters, setLoading, setItems);
   };
 }

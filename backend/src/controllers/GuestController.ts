@@ -14,8 +14,6 @@ export class GuestController {
     try {
       const ipAddress = req.body.ipAddress;
 
-      console.log(ipAddress);
-
       if (!ipAddress) {
         res.status(400).json({
           message: "Ip Address Incorrect",

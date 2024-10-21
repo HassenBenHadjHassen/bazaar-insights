@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import "./Guestpage.css";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Advertisment from "../../components/Advertisment/Banner";
 import Popunder from "../../components/Advertisment/Popunder";
 import FilterPopup from "../../components/FilterPopup/FilterPopup";
@@ -9,7 +9,6 @@ import { BazaarProducts, ComparisonType } from "../../utils/types";
 
 const Guestpage = () => {
   const viewModel = GuestViewModel.GetInstance();
-  const location = useLocation();
 
   const [items, setItems] = useState<BazaarProducts[]>([]);
   const [loading, setLoading] = useState(false);
@@ -20,18 +19,6 @@ const Guestpage = () => {
   const [editing, setEditing] = useState({ active: false, name: null });
   const [inputValue, setInputValue] = useState(0);
   const [inputComparison, setInputComparison] = useState<ComparisonType>(">=");
-
-  useEffect(() => {
-    async function loadGuestData() {
-      await viewModel.getGuest(
-        timeLeft,
-        filterAttempts,
-        setFilterAttempts,
-        setTimeLeft
-      );
-    }
-    loadGuestData();
-  }, []);
 
   useEffect(() => {
     async function getItems() {
@@ -48,14 +35,6 @@ const Guestpage = () => {
 
     return () => clearInterval(timer);
   }, []);
-
-  useEffect(() => {
-    const updateGuest = async () => {
-      await viewModel.updateGuestFun(filterAttempts, timeLeft);
-    };
-
-    updateGuest();
-  }, [location]);
 
   const formatTime = (seconds: number) => {
     const minutes = String(Math.floor(seconds / 60)).padStart(2, "0");
@@ -93,7 +72,7 @@ const Guestpage = () => {
         <Advertisment style={{ marginTop: "3rem" }} atOptions={ad2} />
       </div>
       <div className="guestview">
-        {showFilterPopup && filterAttempts > 0 && (
+        {showFilterPopup && filterAttempts > 0 && !loading && (
           <FilterPopup
             filters={filters}
             setFilters={setFilters}
