@@ -280,3 +280,10 @@
     transform: rotate(360deg);
   }
 }
+
+.guestview_no_product {
+  text-align: center;
+  font-size: 1.5em;
+  color: #ccc;
+  margin: 20px 0;
+}

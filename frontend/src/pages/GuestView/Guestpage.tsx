@@ -100,6 +100,10 @@ const Guestpage = () => {
           <div className="guestview_products_list">
             {loading ? (
               <div className="guestview_loading"></div>
+            ) : items.length === 0 ? (
+              <div className="guestview_no_product">
+                <span>No products found.</span>
+              </div>
             ) : (
               items.map((product, index) => (
                 <div
