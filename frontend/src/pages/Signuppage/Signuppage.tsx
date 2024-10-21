@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./signuppage.css";
+import "./Signuppage.css";
 import { handleRedirect } from "../../utils/handleRedirect";
 import { useNavigate } from "react-router-dom";
 import { validateEmail, validatePassword } from "../../utils/validations";
