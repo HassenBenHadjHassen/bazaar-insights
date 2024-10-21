@@ -125,12 +125,7 @@ export class GuestViewModel {
   // handleEditStart method
   public handleEditStart = (
     name: keyof FilterParams,
-    setEditing: React.Dispatch<
-      React.SetStateAction<{
-        active: boolean;
-        name: null;
-      }>
-    >,
+    setEditing: any,
     setInputValue: SetState<number>,
     filters: FilterParams
   ): void => {

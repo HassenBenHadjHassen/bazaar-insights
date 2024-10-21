@@ -1,5 +1,3 @@
-import { useState } from "react";
-import { BazaarProducts, FilterParams } from "./utils/types";
 import "./App.css";
 import Template from "./components/Template/Template";
 import Homepage from "./pages/HomePage/Homepage";
