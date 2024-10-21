@@ -61,8 +61,8 @@ export const login = async (
     const response = await loginApi(email, password);
 
     if (response.status === 200) {
-      const data: string = response.data.message; // Assuming this is where the JWT is returned
-      localStorage.setItem("jwtToken", data);
+      const data: string = response.data.message;
+      localStorage.setItem("jwtToken", JSON.stringify(data));
       return {
         success: true,
         data,

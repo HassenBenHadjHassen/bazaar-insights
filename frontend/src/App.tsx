@@ -15,6 +15,8 @@ import ForgotPassword from "./pages/ForgotPassword/ForgotPassword";
 import Guestpage from "./pages/GuestView/Guestpage";
 import { AuthProvider } from "./context/AuthContext";
 import Accountpage from "./pages/Accountpage/Accountpage";
+import Dashboardpage from "./pages/Dashboardpage/Dashboardpage";
+import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 
 const page = (
   path: string,
@@ -30,42 +32,53 @@ const page = (
 
 export const router = createBrowserRouter([
   page("/", <Homepage />, "Homepage"),
-  page("/login", <Loginpage />, "Login"),
-  page("/sign-up", <Signuppage />, "Signup"),
+  page(
+    "/login",
+    <ProtectedRoute requiresAuth={false}>
+      <Loginpage />
+    </ProtectedRoute>,
+    "Login"
+  ),
+  page(
+    "/sign-up",
+    <ProtectedRoute requiresAuth={false}>
+      <Signuppage />
+    </ProtectedRoute>,
+    "Signup"
+  ),
   page("/terms", <Terms />, "Terms Of Service"),
   page("/privacy", <Privacy />, "Privacy Policy"),
-  page("/forgot-password", <ForgotPassword />, "Forgot Password"),
-  page("/guest", <Guestpage />, "Guest"),
-  page("/account", <Accountpage />, "Account"),
+  page(
+    "/forgot-password",
+    <ProtectedRoute requiresAuth={false}>
+      <ForgotPassword />
+    </ProtectedRoute>,
+    "Forgot Password"
+  ),
+  page(
+    "/guest",
+    <ProtectedRoute requiresAuth={false}>
+      <Guestpage />
+    </ProtectedRoute>,
+    "Guest"
+  ),
+  page(
+    "/account",
+    <ProtectedRoute requiresAuth={true}>
+      <Accountpage />
+    </ProtectedRoute>,
+    "Account"
+  ),
+  page(
+    "/dashboard",
+    <ProtectedRoute requiresAuth={true}>
+      <Dashboardpage />
+    </ProtectedRoute>,
+    "Dashboard"
+  ),
 ]);
 
 const App = () => {
-  const [filters, setFilters] = useState<FilterParams>({
-    buyPriceFilter: { value: 0, comparison: ">=" },
-    sellPriceFilter: { value: 0, comparison: ">=" },
-    sellVolumeFilter: { value: 0, comparison: ">=" },
-    buyVolumeFilter: { value: 0, comparison: ">=" },
-    weekBuyTransactionVolumeFilter: { value: 0, comparison: ">=" },
-    weekSellTransactionVolumeFilter: { value: 0, comparison: ">=" },
-    profitFilter: { value: 0, comparison: ">=" },
-    profitMarginFilter: { value: 0, comparison: ">=" },
-  });
-
-  const [filteredProducts, setFilteredProducts] = useState<
-    BazaarProducts[] | null
-  >(null);
-
-  // useEffect(() => {
-  //   const fetchFilteredProducts = async () => {
-  //     const hypixel = Hypixel.getInstance();
-  //     const filtered = await hypixel.bazaarProducts();
-  //     console.log(filtered);
-  //     setFilteredProducts(filtered);
-  //   };
-
-  //   fetchFilteredProducts();
-  // }, [filters]);
-
   return (
     <React.StrictMode>
       <ErrorBoundary>

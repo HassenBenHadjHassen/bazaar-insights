@@ -1,10 +1,28 @@
+.guestpage-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  position: relative;
+}
+
+.advertisment {
+  margin: 10px;
+}
+
+.advertisement-left,
+.advertisement-right {
+  flex: 1 1 300px;
+  display: flex;
+  justify-content: center;
+}
+
 .guestview {
   max-width: 1200px;
+  flex: 1 1 600px;
   margin: 0 auto;
   padding: 20px;
   text-align: center;
   background-color: var(--background-color);
-  flex: 1;
 }
 
 .guestview_header {
@@ -38,21 +56,23 @@
 
 .guestview_products_list {
   display: flex;
-  justify-content: space-around;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 .guestview_product_card {
   background-color: var(--secondary-color);
   padding: 20px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-  border-radius: 10px;
-  width: 30%;
-  text-align: left;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  margin: 10px;
+  border-radius: 8px;
+  flex: 1 1 200px;
+  max-width: 300px;
+  position: relative;
   transition: transform 0.2s;
-  cursor: pointer;
 }
 
 .guestview_product_card:hover {
-  transform: translateY(-5px);
+  transform: scale(1.05);
 }
 
 .guestview_product_card img {
@@ -105,6 +125,7 @@
   border-radius: 5px;
   cursor: pointer;
   font-size: 1rem;
+  margin-top: 0.25rem;
 }
 
 .guestview_filter_button:hover {
@@ -122,7 +143,7 @@
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
   text-align: center;
-  margin: 20px 0;
+  margin: 10px;
 }
 
 .guestview_timer h2 {
@@ -177,7 +198,7 @@
 
 .glitch {
   position: relative;
-  overflow: hidden; /* Ensure pseudo-elements do not overflow the card */
+  overflow: hidden;
 }
 
 .glitch:before,
@@ -186,23 +207,23 @@
   position: absolute;
   left: 0;
   top: 0;
-  width: 100%; /* Cover the entire width */
-  height: 100%; /* Cover the entire height */
-  background: url("noise.png") repeat; /* Path to noise texture */
-  background-size: 100%; /* Adjust size of noise texture */
-  opacity: 0.7; /* Adjust visibility */
+  width: 100%;
+  height: 100%;
+  background: url("noise.png") repeat;
+  background-size: 100%;
+  opacity: 0.7;
   animation: noise-anim 0.15s infinite;
-  clip-path: inset(0); /* Ensure the pseudo-elements cover the card */
+  clip-path: inset(0);
 }
 
 .glitch:before {
-  left: 2px; /* Adjust horizontal offset */
-  text-shadow: -1px 0 rgba(255, 0, 0, 0.7); /* Color for glitch effect */
+  left: 2px;
+  text-shadow: -1px 0 rgba(255, 0, 0, 0.7);
 }
 
 .glitch:after {
-  left: -2px; /* Adjust horizontal offset */
-  text-shadow: 1px 0 rgba(0, 255, 0, 0.7); /* Color for glitch effect */
+  left: -2px;
+  text-shadow: 1px 0 rgba(0, 255, 0, 0.7);
 }
 
 @keyframes noise-anim {
@@ -211,16 +232,16 @@
     opacity: 1;
   }
   10% {
-    transform: translate(-1px, 0.5px) scale(1.02); /* Reduced translation and scaling */
-    opacity: 0.95; /* Less drop in opacity */
+    transform: translate(-1px, 0.5px) scale(1.02);
+    opacity: 0.95;
   }
   20% {
-    transform: translate(1px, -0.5px) scale(1.02); /* Added a subtle movement */
-    opacity: 0.95; /* Consistent opacity */
+    transform: translate(1px, -0.5px) scale(1.02);
+    opacity: 0.95;
   }
   30% {
-    transform: translate(0, 1px) scale(1); /* Slight vertical movement */
-    opacity: 1; /* Return to full opacity */
+    transform: translate(0, 1px) scale(1);
+    opacity: 1;
   }
   100% {
     transform: translate(0) scale(1);
@@ -228,7 +249,7 @@
   }
 }
 
-.overlay-text {
+.signup_glitch_overlay_text {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -239,4 +260,22 @@
   z-index: 1;
   background-color: #000000c7;
   border-radius: 8px;
+  width: 70%;
+  padding: 1rem;
+}
+
+.guestview_loading {
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-left-color: var(--primary-color);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin: auto;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }

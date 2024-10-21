@@ -14,7 +14,7 @@ model User {
   id                   String         @id @default(auto()) @map("_id") @db.ObjectId // Unique identifier
   email                String         @unique
   fullName             String
-  password         String         // Store hashed password
+  password             String         // Store hashed password
   role                 Role           // Enum for 'Account' and 'Pro'
   dailyUsageTime       Int            @default(0)  // Time spent in minutes
   dailyFilterAttempts  Int            @default(0)  // Number of filter attempts
@@ -37,7 +37,7 @@ enum Role {
 }
 
 model PasswordResetToken {
-  id        String     @id @default(uuid()) @map("_id")
+  id        String     @id @default(auto()) @map("_id") @db.ObjectId
   userId    String     @db.ObjectId
   token     String     // The reset token
   expiresAt DateTime   // When the token expires
@@ -48,7 +48,7 @@ model PasswordResetToken {
 }
 
 model Subscription {
-  id        String         @id @default(uuid()) @map("_id")
+  id        String         @id @default(auto()) @map("_id") @db.ObjectId
   userId    String         @unique @db.ObjectId  // Each user can only have one active subscription
   type      SubscriptionType
   startDate DateTime
@@ -64,7 +64,7 @@ enum SubscriptionType {
 }
 
 model AccessLog {
-  id          String   @id @default(uuid()) @map("_id")
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
   userId      String   @db.ObjectId // Foreign key to User model
   date        DateTime @default(now())  // Track the date when the log was created
   duration    Int      @default(0)      // Duration of usage in minutes
@@ -73,4 +73,11 @@ model AccessLog {
   user        User     @relation(fields: [userId], references: [id])
 
   @@index([userId])   // Index on userId for faster querying
+}
+
+model Guest {
+  id                            String         @id @default(auto()) @map("_id") @db.ObjectId
+  ipAddress                     String         @unique // Store IP address for tracking
+  timeRemaining                 Int            // Time Left
+  filterAttemptsRemaining       Int            // Filter Attempts Left
 }

@@ -15,5 +15,13 @@ export const MESSAGES = {
   UNEXPECTED_ERROR: "Unexpected error occurred",
   FETCH_FAILED: "Failed to fetch bazaar products",
   INVALID_USER: "User not found",
+
+  /* Guest */
+  GUEST_REGISTERED: "Guest Registered Successfully",
+  GUEST_EXISTS: "Guest Already In Database",
+  GUEST_UPDATE: "Guest Updated Successfully",
+  INVALID_GUEST: "Guest not found",
+
+  /* Services */
   EMAIL_SENT: "Password reset email sent",
 };

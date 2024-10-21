@@ -1,4 +1,6 @@
 import React, { useEffect, useRef } from "react";
+import { useAuth } from "../../hooks/AuthHook";
+import { Role } from "../../types/authTypes";
 
 interface AdOptions {
   key: string;
@@ -14,11 +16,8 @@ interface atOptionsProps {
   style?: React.CSSProperties;
 }
 
-const Advertisment: React.FC<atOptionsProps> = ({
-  atOptions,
-  className,
-  style,
-}) => {
+const Banner: React.FC<atOptionsProps> = ({ atOptions, className, style }) => {
+  const { user } = useAuth();
   const banner = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -34,7 +33,13 @@ const Advertisment: React.FC<atOptionsProps> = ({
     }
   }, [banner]);
 
-  return <div style={style} className={className} ref={banner}></div>;
+  return (
+    <>
+      {user && user.role !== Role.PRO && (
+        <div style={style} className={className} ref={banner}></div>
+      )}
+    </>
+  );
 };
 
-export default Advertisment;
+export default Banner;

@@ -87,3 +87,8 @@ export interface FilterCondition {
   value: number;
   comparison: ComparisonType;
 }
+
+export interface FilterEndpointQuery {
+  limit?: number;
+  sort?: string;
+}

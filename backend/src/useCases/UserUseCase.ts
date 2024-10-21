@@ -16,6 +16,7 @@ import {
   userRegisterSchema,
 } from "../utils/validationSchemas";
 import { sendResetEmail } from "../utils/sendResetEmail";
+import { createResponse } from "../utils/createResponse";
 
 dotenv.config();
 
@@ -23,31 +24,19 @@ dotenv.config();
 export class UserUseCase {
   constructor(@inject(Datasource) private datasource: Datasource) {}
 
-  private generateToken(userId: string): string {
+  private generateToken(userId: string, data?: any): string {
     const jwtSecret = process.env.JWT_SECRET;
     if (!jwtSecret) {
       console.warn("JWT_SECRET is not defined in environment variables");
       process.exit(1);
     }
-    return jwt.sign({ userId }, jwtSecret, { expiresIn: "1h" });
-  }
-
-  private createResponse(
-    success: boolean,
-    statusCode: number,
-    message: string
-  ): UseCaseReturn {
-    return {
-      success: success,
-      statusCode,
-      message,
-    };
+    return jwt.sign({ ...data, userId }, jwtSecret, { expiresIn: "1h" });
   }
 
   createUser = async (userData: UserRegisterModel): Promise<UseCaseReturn> => {
     const { error } = userRegisterSchema.validate(userData);
     if (error) {
-      return this.createResponse(
+      return createResponse(
         false,
         STATUS_CODES.BAD_REQUEST,
         error.details[0].message
@@ -55,12 +44,10 @@ export class UserUseCase {
     }
 
     try {
-      const existingUser = await this.datasource.findUniqueUser({
-        where: { email: userData.email },
-      });
+      const existingUser = await this.datasource.findUniqueUser(userData.email);
 
       if (existingUser) {
-        return this.createResponse(
+        return createResponse(
           false,
           STATUS_CODES.BAD_REQUEST,
           MESSAGES.EMAIL_IN_USE
@@ -76,7 +63,7 @@ export class UserUseCase {
 
       await this.datasource.createUser(newUser);
 
-      return this.createResponse(
+      return createResponse(
         true,
         STATUS_CODES.CREATED,
         MESSAGES.USER_REGISTERED
@@ -84,7 +71,7 @@ export class UserUseCase {
     } catch (error) {
       console.error("Error registering user:", error);
 
-      return this.createResponse(
+      return createResponse(
         false,
         STATUS_CODES.INTERNAL_SERVER_ERROR,
         MESSAGES.INTERNAL_ERROR
@@ -97,7 +84,7 @@ export class UserUseCase {
   ): Promise<UseCaseReturn> => {
     const { error } = userLoginSchema.validate(userData);
     if (error) {
-      return this.createResponse(
+      return createResponse(
         false,
         STATUS_CODES.BAD_REQUEST,
         error.details[0].message
@@ -105,12 +92,10 @@ export class UserUseCase {
     }
 
     try {
-      const user = await this.datasource.findUniqueUser({
-        where: { email: userData.email },
-      });
+      const user = await this.datasource.findUniqueUser(userData.email);
 
       if (!user) {
-        return this.createResponse(
+        return createResponse(
           false,
           STATUS_CODES.UNAUTHORIZED,
           MESSAGES.INVALID_CREDENTIALS
@@ -123,19 +108,20 @@ export class UserUseCase {
       );
 
       if (!isPasswordValid) {
-        return this.createResponse(
+        return createResponse(
           false,
           STATUS_CODES.UNAUTHORIZED,
           MESSAGES.INVALID_CREDENTIALS
         );
       }
+      const { role, fullName, email } = user;
 
-      const token = this.generateToken(user.id);
+      const token = this.generateToken(user.id, { role, fullName, email });
 
-      return this.createResponse(true, STATUS_CODES.SUCCESS, token);
+      return createResponse(true, STATUS_CODES.SUCCESS, token);
     } catch (error) {
       console.error("Error logging in user:", error);
-      return this.createResponse(
+      return createResponse(
         false,
         STATUS_CODES.INTERNAL_SERVER_ERROR,
         MESSAGES.INTERNAL_ERROR
@@ -146,7 +132,7 @@ export class UserUseCase {
   recoverPassword = async (email: string): Promise<UseCaseReturn> => {
     const { error } = userPasswordRecoverSchema.validate(email);
     if (error) {
-      return this.createResponse(
+      return createResponse(
         false,
         STATUS_CODES.BAD_REQUEST,
         error.details[0].message
@@ -155,12 +141,10 @@ export class UserUseCase {
 
     try {
       // 1. Find the user by email
-      const user = await this.datasource.findUniqueUser({
-        where: { email },
-      });
+      const user = await this.datasource.findUniqueUser(email);
 
       if (!user) {
-        return this.createResponse(
+        return createResponse(
           false,
           STATUS_CODES.NOT_FOUND,
           MESSAGES.INVALID_USER
@@ -177,14 +161,10 @@ export class UserUseCase {
       sendResetEmail(email, resetToken);
 
       // 5. Return Success
-      return this.createResponse(
-        true,
-        STATUS_CODES.SUCCESS,
-        MESSAGES.EMAIL_SENT
-      );
+      return createResponse(true, STATUS_CODES.SUCCESS, MESSAGES.EMAIL_SENT);
     } catch (error) {
       console.error("Error Recovering Password:", error);
-      return this.createResponse(
+      return createResponse(
         false,
         STATUS_CODES.INTERNAL_SERVER_ERROR,
         MESSAGES.INTERNAL_ERROR
@@ -195,14 +175,10 @@ export class UserUseCase {
   getAllUsers = async () => {
     try {
       const users = await this.datasource.getAllUsers();
-      return this.createResponse(
-        true,
-        STATUS_CODES.SUCCESS,
-        JSON.stringify(users)
-      );
+      return createResponse(true, STATUS_CODES.SUCCESS, JSON.stringify(users));
     } catch (error) {
       console.error("Error getting all users:", error);
-      return this.createResponse(
+      return createResponse(
         false,
         STATUS_CODES.INTERNAL_SERVER_ERROR,
         MESSAGES.INTERNAL_ERROR

@@ -22,4 +22,12 @@ export const userLoginSchema = Joi.object({
     .required(),
 });
 
+export const guestDataSchema = Joi.object({
+  ipAddress: Joi.string().ip().required(),
+  timeRemaining: Joi.number().required(),
+  filterAttemptsRemaining: Joi.number().required(),
+});
+
 export const userPasswordRecoverSchema = Joi.string().email().required();
+
+export const getGuestSchema = Joi.string().ip().required();

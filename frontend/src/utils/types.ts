@@ -81,9 +81,18 @@ export interface FilterParams {
   profitMarginFilter: FilterCondition;
 }
 
-type ComparisonType = "<=" | ">=" | "==";
+export type ComparisonType = "<=" | ">=" | "==";
 
 export interface FilterCondition {
   value: number;
   comparison: ComparisonType;
 }
+
+export type UpdateState =
+  | number
+  | boolean
+  | FilterParams
+  | ComparisonType
+  | { active: boolean; name: keyof FilterParams | null }
+  | ((prev: any) => any)
+  | never[];

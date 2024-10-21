@@ -6,6 +6,7 @@ import {
   register,
 } from "../services/authService";
 import { AuthContextType, JwtPayload } from "../types/authTypes";
+import { jwtDecode } from "jwt-decode";
 
 interface AuthProviderProps {
   children: ReactNode;
@@ -35,11 +36,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     if (response.success) {
       const token = getTokenFromLocalStorage();
       if (token) {
-        const decodedUser: JwtPayload = JSON.parse(token);
+        const parsedToken: string = JSON.parse(token);
+        const decodedUser: JwtPayload = jwtDecode(parsedToken);
+
         setUser(decodedUser);
       }
     }
-    console.log(response);
     return response;
   };
 
@@ -51,7 +53,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   useEffect(() => {
     const token = getTokenFromLocalStorage();
     if (token) {
-      const decodedUser: JwtPayload = JSON.parse(token);
+      const parsedToken: string = JSON.parse(token);
+      const decodedUser: JwtPayload = jwtDecode(parsedToken);
+
       setUser(decodedUser);
     }
   }, []);

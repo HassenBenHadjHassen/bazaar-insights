@@ -1,70 +1,66 @@
 import { useEffect, useState } from "react";
 import "./Guestpage.css";
-import { Link } from "react-router-dom";
-import Advertisment from "../../components/Advertisment/Advertisment";
+import { Link, useLocation } from "react-router-dom";
+import Advertisment from "../../components/Advertisment/Banner";
+import Popunder from "../../components/Advertisment/Popunder";
+import FilterPopup from "../../components/FilterPopup/FilterPopup";
+import { GuestViewModel } from "../../viewModels/Guestpage/GuestViewModel";
+import { BazaarProducts, ComparisonType } from "../../utils/types";
 
 const Guestpage = () => {
+  const viewModel = GuestViewModel.GetInstance();
+  const location = useLocation();
+
+  const [items, setItems] = useState<BazaarProducts[]>([]);
+  const [loading, setLoading] = useState(false);
   const [timeLeft, setTimeLeft] = useState(600);
   const [filterAttempts, setFilterAttempts] = useState(3);
+  const [showFilterPopup, setShowFilterPopup] = useState(false);
+  const [filters, setFilters] = useState(viewModel.DEFAULT_FILTERS);
+  const [editing, setEditing] = useState({ active: false, name: null });
+  const [inputValue, setInputValue] = useState(0);
+  const [inputComparison, setInputComparison] = useState<ComparisonType>(">=");
+
+  useEffect(() => {
+    async function loadGuestData() {
+      await viewModel.getGuest(
+        timeLeft,
+        filterAttempts,
+        setFilterAttempts,
+        setTimeLeft
+      );
+    }
+    loadGuestData();
+  }, []);
+
+  useEffect(() => {
+    async function getItems() {
+      await viewModel.getGuestItems(filters, setLoading, setItems);
+    }
+
+    getItems();
+  }, [filters]);
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setTimeLeft((prev) => (prev > 0 ? prev - 1 : 0));
+      setTimeLeft((prev: number) => (prev > 0 ? prev - 1 : 0));
     }, 1000);
 
     return () => clearInterval(timer);
   }, []);
 
+  useEffect(() => {
+    const updateGuest = async () => {
+      await viewModel.updateGuestFun(filterAttempts, timeLeft);
+    };
+
+    updateGuest();
+  }, [location]);
+
   const formatTime = (seconds: number) => {
     const minutes = String(Math.floor(seconds / 60)).padStart(2, "0");
     const secs = String(seconds % 60).padStart(2, "0");
     return `${minutes}:${secs}`;
-  };
-
-  const products = [
-    {
-      name: "Cocoa Beans",
-      buyPrice: 0.7,
-      sellPrice: 5.4,
-      profit: 4.7,
-      profitMargin: 87.04,
-      buyVolume: 3874232,
-      sellVolume: 3296877,
-      weekBuyTransactionVolume: 19781093,
-      weekSellTransactionVolume: 58296396,
-      skin: "https://skykings.net/item-images/INK_SACK:3",
-    },
-    {
-      productId: "INK_SACK:4",
-      skin: "https://skykings.net/item-images/INK_SACK:4",
-      name: "Lapis Lazuli",
-      buyPrice: 2.3,
-      sellPrice: 6.9,
-      buyVolume: 9678646,
-      sellVolume: 7480662,
-      weekBuyTransactionVolume: 11124893,
-      weekSellTransactionVolume: 124854102,
-      profit: 4.6,
-      profitMargin: 66.67,
-    },
-    {
-      skin: "https://skykings.net/item-images/ENCHANTMENT_ULTIMATE_NO_PAIN_NO_GAIN_2",
-      name: "Enchanted Ultimate No Pain No Gain 2",
-      buyPrice: 0,
-      sellPrice: 0.4,
-      buyVolume: 0,
-      sellVolume: 15,
-      weekBuyTransactionVolume: 389,
-      weekSellTransactionVolume: 397,
-      profit: 0.4,
-      profitMargin: 100,
-    },
-  ];
-
-  const handleFilterClick = () => {
-    if (filterAttempts > 0) {
-      setFilterAttempts(filterAttempts - 1);
-    }
   };
 
   const ad1 = {
@@ -91,31 +87,30 @@ const Guestpage = () => {
     params: {},
   };
 
-  useEffect(() => {
-    const script = document.createElement("script");
-    script.src =
-      "//plainsenlargecoronation.com/7f/b5/de/7fb5de07862442ac82771bdeb1af5dbc.js";
-    script.type = "text/javascript";
-    script.async = true;
-    document.head.appendChild(script);
-
-    return () => {
-      document.head.removeChild(script);
-    };
-  }, []);
-
   return (
-    <div style={{ display: "flex", flexDirection: "row" }}>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          flex: "0.5",
-        }}
-      >
+    <div className="guestpage-container">
+      <div className="advertisement-left">
         <Advertisment style={{ marginTop: "3rem" }} atOptions={ad2} />
       </div>
       <div className="guestview">
+        {showFilterPopup && filterAttempts > 0 && (
+          <FilterPopup
+            filters={filters}
+            setFilters={setFilters}
+            editing={editing}
+            setEditing={setEditing}
+            inputValue={inputValue}
+            setInputValue={setInputValue}
+            inputComparison={inputComparison}
+            setInputComparison={setInputComparison}
+            setShowFilterPopup={setShowFilterPopup}
+            setLoading={setLoading}
+            setItems={setItems}
+            setFilterAttempts={setFilterAttempts}
+            filterAttempts={filterAttempts}
+          />
+        )}
+        <Popunder />
         <header className="guestview_header">
           <h1>Bazaar Insights - Guest View</h1>
           <p>Sign up to unlock more products and advanced features!</p>
@@ -124,41 +119,49 @@ const Guestpage = () => {
         <section className="guestview_products">
           <h2>Top 3 Bazaar Flip Products</h2>
           <div className="guestview_products_list">
-            {products.map((product, index) => (
-              <div
-                key={index}
-                className={
-                  index === 0
-                    ? "guestview_product_card glitch"
-                    : timeLeft === 0
-                    ? "guestview_product_card glitch"
-                    : "guestview_product_card"
-                }
-              >
-                <img src={product.skin} alt={product.name} />
-                <h3>{product.name}</h3>
-                <p className="price">Buy Price: {product.buyPrice} coins</p>
-                <p className="price">Sell Price: {product.sellPrice} coins</p>
-                <p className="price">Profit: {product.profit} coins</p>
-                <p className="price">Profit Margin: {product.profitMargin}%</p>
-                <p>Buy Volume: {product.buyVolume.toLocaleString()} units</p>
-                <p>Sell Volume: {product.sellVolume.toLocaleString()} units</p>
-                <p>
-                  Weekly Buy Transactions:{" "}
-                  {product.weekBuyTransactionVolume.toLocaleString()} coins
-                </p>
-                <p>
-                  Weekly Sell Transactions:{" "}
-                  {product.weekSellTransactionVolume.toLocaleString()} coins
-                </p>
-                {index === 0 && (
-                  <div className="overlay-text">Sign up to see the content</div>
-                )}
-                {index !== 0 && timeLeft === 0 && (
-                  <div className="overlay-text">Sign up to see the content</div>
-                )}
-              </div>
-            ))}
+            {loading ? (
+              <div className="guestview_loading"></div>
+            ) : (
+              items.map((product, index) => (
+                <div
+                  key={index}
+                  className={`guestview_product_card ${
+                    index === 0 || timeLeft === 0 ? "glitch" : ""
+                  }`}
+                >
+                  <img src={product.skin} alt={product.productName} />
+                  <h3>{product.productName}</h3>
+                  <p className="price">Buy Price: {product.buyPrice} coins</p>
+                  <p className="price">Sell Price: {product.sellPrice} coins</p>
+                  <p className="price">Profit: {product.profit} coins</p>
+                  <p className="price">
+                    Profit Margin: {product.profitMargin}%
+                  </p>
+                  <p>Buy Volume: {product.buyVolume.toLocaleString()} units</p>
+                  <p>
+                    Sell Volume: {product.sellVolume.toLocaleString()} units
+                  </p>
+                  <p>
+                    Weekly Buy Transactions:{" "}
+                    {product.weekBuyTransactionVolume.toLocaleString()} coins
+                  </p>
+                  <p>
+                    Weekly Sell Transactions:{" "}
+                    {product.weekSellTransactionVolume.toLocaleString()} coins
+                  </p>
+                  {index === 0 && (
+                    <div className="signup_glitch_overlay_text">
+                      Sign up to see this content
+                    </div>
+                  )}
+                  {index !== 0 && timeLeft === 0 && (
+                    <div className="signup_glitch_overlay_text">
+                      Sign up to see this content
+                    </div>
+                  )}
+                </div>
+              ))
+            )}
           </div>
         </section>
 
@@ -166,10 +169,12 @@ const Guestpage = () => {
           <h2>Filter Options</h2>
           <p>Remaining Filter Attempts: {filterAttempts}/3</p>
           <button
-            onClick={handleFilterClick}
+            onClick={() =>
+              viewModel.handleFilterClick(showFilterPopup, setShowFilterPopup)
+            }
             className="guestview_filter_button"
           >
-            Apply Filter
+            Filter
           </button>
           {filterAttempts === 0 && (
             <p className="guestview_filter_warning">
@@ -207,13 +212,7 @@ const Guestpage = () => {
         </div>
       </div>
 
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          flex: "0.5",
-        }}
-      >
+      <div className="advertisement-right">
         <Advertisment style={{ marginTop: "3rem" }} atOptions={ad3} />
       </div>
     </div>

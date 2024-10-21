@@ -3,12 +3,16 @@ import {
   BazaarData,
   BazaarProducts,
   FilterCondition,
+  FilterEndpointQuery,
   FilterParams,
   Item,
   Items,
   Products,
 } from "../types/ItemTypes";
 import axios from "../utils/axios";
+import { UseCaseReturn } from "../types/useCaseReturn";
+import { MESSAGES, STATUS_CODES } from "../utils/constants";
+import { createResponse } from "../utils/createResponse";
 
 @injectable()
 export class ItemsUseCase {
@@ -116,27 +120,50 @@ export class ItemsUseCase {
   }
 
   public async getFilteredBazaarProducts(
-    filters: FilterParams
-  ): Promise<BazaarProducts[] | null> {
-    const products = await this.getBazaarProducts();
-    if (!products) return null;
+    filters: FilterParams,
+    params: FilterEndpointQuery
+  ): Promise<UseCaseReturn> {
+    try {
+      const { limit } = params;
 
-    return products.filter(
-      (product) =>
-        this.compareValues(product.buyPrice, filters.buyPriceFilter) &&
-        this.compareValues(product.sellPrice, filters.sellPriceFilter) &&
-        this.compareValues(product.sellVolume, filters.sellVolumeFilter) &&
-        this.compareValues(product.buyVolume, filters.buyVolumeFilter) &&
-        this.compareValues(
-          product.weekBuyTransactionVolume,
-          filters.weekBuyTransactionVolumeFilter
-        ) &&
-        this.compareValues(
-          product.weekSellTransactionVolume,
-          filters.weekSellTransactionVolumeFilter
-        ) &&
-        this.compareValues(product.profit, filters.profitFilter) &&
-        this.compareValues(product.profitMargin, filters.profitMarginFilter)
-    );
+      const products = await this.getBazaarProducts();
+      if (!products)
+        return createResponse(
+          false,
+          STATUS_CODES.NOT_FOUND,
+          MESSAGES.FETCH_FAILED
+        );
+
+      const filteredProducts = products.filter(
+        (product) =>
+          this.compareValues(product.buyPrice, filters.buyPriceFilter) &&
+          this.compareValues(product.sellPrice, filters.sellPriceFilter) &&
+          this.compareValues(product.sellVolume, filters.sellVolumeFilter) &&
+          this.compareValues(product.buyVolume, filters.buyVolumeFilter) &&
+          this.compareValues(
+            product.weekBuyTransactionVolume,
+            filters.weekBuyTransactionVolumeFilter
+          ) &&
+          this.compareValues(
+            product.weekSellTransactionVolume,
+            filters.weekSellTransactionVolumeFilter
+          ) &&
+          this.compareValues(product.profit, filters.profitFilter) &&
+          this.compareValues(product.profitMargin, filters.profitMarginFilter)
+      );
+
+      return createResponse(
+        true,
+        STATUS_CODES.SUCCESS,
+        JSON.stringify(filteredProducts.slice(0, limit))
+      );
+    } catch (error) {
+      console.error("Error logging in user:", error);
+      return createResponse(
+        false,
+        STATUS_CODES.INTERNAL_SERVER_ERROR,
+        MESSAGES.INTERNAL_ERROR
+      );
+    }
   }
 }

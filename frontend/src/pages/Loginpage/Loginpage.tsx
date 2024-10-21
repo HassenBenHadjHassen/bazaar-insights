@@ -66,6 +66,8 @@ const Loginpage = () => {
           email: "",
           password: "",
         });
+
+        navigate("/");
       } else {
         setErrors({
           email: "",

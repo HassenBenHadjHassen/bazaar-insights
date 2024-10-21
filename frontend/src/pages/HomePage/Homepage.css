@@ -5,6 +5,7 @@
   justify-content: center;
   position: relative;
   height: 90.5vh;
+  padding: 0 1rem; /* Added padding for smaller screens */
 }
 
 .homepage_header {
@@ -14,6 +15,7 @@
   letter-spacing: 1px;
   line-height: 125%;
   cursor: text;
+  text-align: center; /* Center text for smaller screens */
 }
 
 .homepage_subheader {
@@ -28,6 +30,7 @@
   margin-top: 1rem;
   margin-bottom: 2rem;
   cursor: text;
+  text-align: center; /* Center text for smaller screens */
 }
 
 .homepage_subheader > span:nth-child(2) {
@@ -41,7 +44,9 @@
   align-items: center;
   justify-content: center;
   gap: 2rem;
+  flex-wrap: wrap;
   width: 100%;
+  max-width: 800px;
 }
 
 .homepage_trynow {
@@ -54,6 +59,7 @@
 .homepage_trynow > button {
   padding: 20px 5rem;
   font-size: 1.5rem;
+  width: 100%;
 }
 
 .homepage_trynow > p {
@@ -68,4 +74,66 @@
   left: 0;
   bottom: 0;
   z-index: -1;
+}
+
+/* Media Queries for responsiveness */
+@media (max-width: 1200px) {
+  .homepage_header {
+    font-size: 2.5rem;
+  }
+
+  .homepage_subheader {
+    font-size: 1.25rem;
+  }
+
+  .homepage_boxes {
+    gap: 1rem;
+  }
+
+  .homepage_trynow > button {
+    padding: 15px 3rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .homepage_header {
+    font-size: 2rem;
+  }
+
+  .homepage_subheader {
+    font-size: 1rem;
+  }
+
+  .homepage_boxes {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .homepage_trynow > button {
+    padding: 10px 2rem;
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .homepage_header {
+    font-size: 1.5rem;
+  }
+
+  .homepage_subheader {
+    font-size: 0.9rem;
+  }
+
+  .homepage_trynow > button {
+    padding: 10px 1rem;
+    font-size: 1rem;
+  }
+
+  .homepage_trynow > p {
+    font-size: 0.65rem;
+  }
+
+  .homepage_line_chart {
+    width: 70%;
+  }
 }

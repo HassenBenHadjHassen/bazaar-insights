@@ -1,5 +1,8 @@
 export interface JwtPayload {
   userId: string;
+  role: Role;
+  fullName: string;
+  email: string;
   iat: number;
   exp: number;
 }
@@ -29,4 +32,22 @@ export interface UserRegisterModel {
   email: string;
   password: string;
   ipAddress: string;
+}
+
+export interface GuestData {
+  ipAddress: string;
+  timeRemaining: number;
+  filterAttemptsRemaining: number;
+}
+
+export enum Role {
+  ACCOUNT = "ACCOUNT",
+  PRO = "PRO",
+}
+
+export interface GuestInfo {
+  ipAddress: string;
+  timeRemaining: number;
+  filterAttemptsRemaining: number;
+  id: string;
 }

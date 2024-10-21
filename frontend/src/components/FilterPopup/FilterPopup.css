@@ -1,0 +1,131 @@
+.filterpopup {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 20px;
+  background-color: #666;
+  border-radius: 8px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 999;
+  width: 80%; /* Adjusted width to make it more responsive */
+  max-width: 600px; /* Maximum width for larger screens */
+}
+
+.filterpopup h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 1.5rem; /* Reduced font size for responsiveness */
+}
+
+.filterpopup_row {
+  display: flex;
+  flex-direction: column; /* Stack elements vertically on small screens */
+  margin-bottom: 15px;
+}
+
+.filterpopup_row label {
+  font-size: 14px;
+  text-transform: capitalize;
+  white-space: nowrap;
+  text-align: start;
+}
+
+.filterpopup_row input[type="range"] {
+  margin-right: 10px;
+  width: 100%; /* Full width for the range input */
+}
+
+.filterpopup_row span {
+  width: auto; /* Change to auto for better responsiveness */
+  text-align: right;
+  margin-top: 5px; /* Spacing above the span */
+}
+
+.filterpopup_row select {
+  margin-top: 5px; /* Spacing above the select */
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 100%; /* Full width for the select */
+}
+
+.filterpopup_span_input {
+  display: inline-block;
+  font-size: 16px;
+  color: #333;
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+  cursor: pointer;
+  transition: background-color 0.3s, border-color 0.3s;
+  width: 100%; /* Full width for the input */
+}
+
+.filterpopup_span_input:hover {
+  background-color: #e0e0e0;
+  border-color: #999;
+}
+
+.filterpopup_buttons {
+  display: flex;
+  flex-direction: column; /* Stack buttons vertically */
+  margin-top: 20px;
+}
+
+.filterpopup_buttons button {
+  padding: 8px 16px;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin: 5px 0; /* Space between buttons */
+}
+
+.filterpopup_buttons button:disabled {
+  background-color: #ccc;
+}
+
+.filterpopup_buttons button:focus {
+  outline: none;
+}
+
+.filterpopup_close {
+  display: inline-block;
+  font-size: 1.5rem;
+  color: #fff;
+  background-color: #ff3b3b;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  line-height: 25px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.filterpopup_close:hover {
+  background-color: #ff1a1a;
+}
+
+/* Media Queries for Responsive Design */
+@media (min-width: 600px) {
+  .filterpopup_row {
+    flex-direction: row; /* Change to row for larger screens */
+    align-items: center;
+  }
+
+  .filterpopup_row span,
+  .filterpopup_row select {
+    width: auto; /* Auto width for larger screens */
+  }
+
+  .filterpopup_buttons {
+    flex-direction: row; /* Align buttons horizontally */
+  }
+
+  .filterpopup_buttons button {
+    margin: 0 5px; /* Margin for horizontal buttons */
+  }
+}

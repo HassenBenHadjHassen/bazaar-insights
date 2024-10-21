@@ -1,10 +1,11 @@
 import "./Homepage.css";
 import HomePageInfoBox from "../../components/HomePageInfoBox/HomePageInfoBox";
 import { useNavigate } from "react-router-dom";
-import { handleRedirect } from "../../utils/handleRedirect";
+import { useAuth } from "../../hooks/AuthHook";
 
 const Homepage = () => {
   const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
 
   return (
     <div className="homepage">
@@ -17,7 +18,7 @@ const Homepage = () => {
           Maximize your Hypixel Skyblock profits with the most up-to-date bazaar
           flip recommendations, customized by your filters.
         </span>
-        <span>Signup for more Benefits.</span>
+        {!isAuthenticated && <span>Signup for more Benefits.</span>}
       </div>
 
       <div className="homepage_boxes">
@@ -27,8 +28,12 @@ const Homepage = () => {
       </div>
 
       <div className="homepage_trynow">
-        <button onClick={() => navigate("/guest")}>Try now for free</button>
-        <p>*No Subscription Required*</p>
+        <button
+          onClick={() => navigate(isAuthenticated ? "/dashboard" : "/guest")}
+        >
+          {isAuthenticated ? "Dashboard" : "Try now for free"}
+        </button>
+        {!isAuthenticated && <p>*No Subscription Required*</p>}
       </div>
 
       <img
