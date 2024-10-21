@@ -132,6 +132,30 @@ export class GuestViewModel {
     setInputValue(filters[name]?.value ?? 0);
   };
 
+  // Utility function to convert shorthand to numeric value
+  convertToNumber = (value: string): number => {
+    const regex = /^(\d+)([kmb]?)$/i; // Regex to capture number and suffix
+    const match = value.match(regex);
+
+    if (match) {
+      const numberPart = parseFloat(match[1]);
+      const suffix = match[2].toLowerCase();
+
+      switch (suffix) {
+        case "k": // thousand
+          return numberPart * 1000;
+        case "m": // million
+          return numberPart * 1000000;
+        case "b": // billion
+          return numberPart * 1000000000;
+        default: // no suffix
+          return numberPart;
+      }
+    }
+
+    return 0; // return 0 if input doesn't match the pattern
+  };
+
   // handleInputManualChange method
   public handleInputManualChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -139,8 +163,8 @@ export class GuestViewModel {
     editing: { active: boolean; name: keyof FilterParams | null },
     setFilters: SetState<FilterParams>
   ): void => {
-    let { value } = e.target;
-    let numericValue = Number(value);
+    const { value } = e.target;
+    const numericValue = this.convertToNumber(value);
 
     setInputValue(isNaN(numericValue) ? 0 : numericValue);
 

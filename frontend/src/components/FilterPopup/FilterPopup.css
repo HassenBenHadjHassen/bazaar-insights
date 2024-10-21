@@ -109,23 +109,3 @@
   background-color: #ff1a1a;
 }
 
-/* Media Queries for Responsive Design */
-@media (min-width: 600px) {
-  .filterpopup_row {
-    flex-direction: row; /* Change to row for larger screens */
-    align-items: center;
-  }
-
-  .filterpopup_row span,
-  .filterpopup_row select {
-    width: auto; /* Auto width for larger screens */
-  }
-
-  .filterpopup_buttons {
-    flex-direction: row; /* Align buttons horizontally */
-  }
-
-  .filterpopup_buttons button {
-    margin: 0 5px; /* Margin for horizontal buttons */
-  }
-}

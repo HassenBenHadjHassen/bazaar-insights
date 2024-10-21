@@ -86,8 +86,6 @@ const FilterPopup: React.FC<FilterPopupProps> = ({
       {editing.active && editing.name === name ? (
         <input
           className="filterpopup_span_input"
-          type="number"
-          max={max}
           value={inputValue}
           onChange={(e) =>
             viewModel.handleInputManualChange(
@@ -143,9 +141,9 @@ const FilterPopup: React.FC<FilterPopupProps> = ({
           )
         }
       >
-        <option value=">=">&gt;=</option>
-        <option value="<=">&lt;=</option>
-        <option value="==">==</option>
+        <option value=">=">Greater Than or Equal To</option>
+        <option value="<=">Less Than or Equal To</option>
+        <option value="==">Equal To</option>
       </select>
     </div>
   );
@@ -167,22 +165,22 @@ const FilterPopup: React.FC<FilterPopupProps> = ({
           x
         </span>
       </div>
-      {renderFilterRow("buyPrice", "buyPriceFilter", "1000000000")}
-      {renderFilterRow("sellPrice", "sellPriceFilter", "1000000000")}
-      {renderFilterRow("buyVolume", "buyVolumeFilter", "1000000000")}
-      {renderFilterRow("sellVolume", "sellVolumeFilter", "1000000000")}
+      {renderFilterRow("buy Price", "buyPriceFilter", "100000000")}
+      {renderFilterRow("sell Price", "sellPriceFilter", "100000000")}
+      {renderFilterRow("buy Volume", "buyVolumeFilter", "100000000")}
+      {renderFilterRow("sell Volume", "sellVolumeFilter", "100000000")}
       {renderFilterRow(
-        "weekBuyTransactionVolume",
+        "week Buy Transaction Volume",
         "weekBuyTransactionVolumeFilter",
         "1000000000"
       )}
       {renderFilterRow(
-        "weekSellTransactionVolume",
+        "week Sell Transaction Volume",
         "weekSellTransactionVolumeFilter",
         "1000000000"
       )}
       {renderFilterRow("profit", "profitFilter", "1000000000")}
-      {renderFilterRow("profitMargin", "profitMarginFilter", "100")}
+      {renderFilterRow("profit Margin", "profitMarginFilter", "100")}
       <div className="filterpopup_buttons">
         <button onClick={() => resetFilters(setFilters)}>Reset Filters</button>
         <button onClick={applyFilters}>Apply Filters</button>
