@@ -19,9 +19,9 @@ export const register = async (
     };
 
     const response = await registerApi(userData);
-    const data: string = response.data;
+    const data: string = response.data.message;
 
-    if (response.status === 200) {
+    if (response.status === 201) {
       return {
         success: true,
         data,

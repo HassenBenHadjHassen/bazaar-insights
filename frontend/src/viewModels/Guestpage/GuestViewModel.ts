@@ -63,7 +63,6 @@ export class GuestViewModel {
     timeRemaining: number
   ) => {
     try {
-      console.log("Updating Guest");
       await updateGuest(timeRemaining, filterAttemptsRemaining);
     } catch (error) {
       console.log(error);

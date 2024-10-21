@@ -21,8 +21,6 @@ const ForgotPassword = () => {
       setError("Please enter a valid email address.");
       return;
     }
-
-    console.log(email);
   };
 
   return (
