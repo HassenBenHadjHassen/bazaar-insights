@@ -21,7 +21,7 @@ const Homepage = () => {
       const items = await totalItems();
 
       if (items.success) {
-        setItems(JSON.parse(items.data.message));
+        setItems(items.data);
       }
     };
 

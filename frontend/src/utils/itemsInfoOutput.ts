@@ -1,3 +1,4 @@
+import { priceFormatUpdate } from "./priceFormatUpdate";
 import { BazaarProducts } from "./types";
 
 export const totalItemsCalculated = (items: BazaarProducts[]) => {
@@ -5,5 +6,5 @@ export const totalItemsCalculated = (items: BazaarProducts[]) => {
 };
 
 export const totalProfitCalculated = (items: BazaarProducts[]): string => {
-  return items.reduce((acc, item) => acc + item.profit, 0).toString();
+  return priceFormatUpdate(items.reduce((acc, item) => acc + item.profit, 0));
 };
