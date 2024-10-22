@@ -67,7 +67,7 @@ export class ItemsUseCase {
       .replace(/\bEnchantment\b/i, "Enchanted");
   }
 
-  private async getBazaarProducts(): Promise<BazaarProducts[] | null> {
+  public async getBazaarProducts(): Promise<BazaarProducts[] | null> {
     const bazaarData = await this.fetchBazaarData();
     if (!bazaarData) return null;
 

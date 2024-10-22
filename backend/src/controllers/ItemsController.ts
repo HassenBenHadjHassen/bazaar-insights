@@ -32,4 +32,25 @@ export class ItemsController {
         .json({ message: MESSAGES.UNEXPECTED_ERROR, error });
     }
   }
+
+  @httpGet("/total")
+  public async getTotalBazaarProducts(
+    req: Request,
+    res: Response
+  ): Promise<void> {
+    try {
+      const products = await this.itemsUseCase.getBazaarProducts();
+      if (!products) {
+        res
+          .status(STATUS_CODES.INTERNAL_SERVER_ERROR)
+          .json({ message: MESSAGES.FETCH_FAILED });
+        return;
+      }
+      res.status(STATUS_CODES.SUCCESS).json({ message: products });
+    } catch (error) {
+      res
+        .status(STATUS_CODES.INTERNAL_SERVER_ERROR)
+        .json({ message: MESSAGES.UNEXPECTED_ERROR, error });
+    }
+  }
 }

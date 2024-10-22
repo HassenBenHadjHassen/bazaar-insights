@@ -12,3 +12,7 @@ export const getGuestItems = async (filters: FilterParams) => {
     },
   });
 };
+
+export const getItems = async () => {
+  return await axios.get("/items/total");
+};
