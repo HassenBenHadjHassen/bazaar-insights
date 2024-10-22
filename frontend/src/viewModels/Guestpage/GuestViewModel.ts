@@ -84,7 +84,8 @@ export class GuestViewModel {
   public handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     setFilters: React.Dispatch<React.SetStateAction<FilterParams>>,
-    max: number
+    max: number,
+    useEquation: boolean = true
   ) => {
     const value = parseFloat(e.target.value);
     const calculatedValue = this.customSliderValue(value, max);
@@ -99,7 +100,7 @@ export class GuestViewModel {
       ...prev,
       [filterName]: {
         ...prev[filterName],
-        value: formattedValue, // Keep as a number
+        value: useEquation ? formattedValue : value, // Keep as a number
       },
     }));
   };

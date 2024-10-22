@@ -50,8 +50,12 @@ const FilterPopup: React.FC<FilterPopupProps> = ({
   const viewModel = GuestViewModel.GetInstance();
 
   const handleInputChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>, max: number) => {
-      viewModel.handleInputChange(e, setFilters, max);
+    (
+      e: React.ChangeEvent<HTMLInputElement>,
+      max: number,
+      useEquation: boolean
+    ) => {
+      viewModel.handleInputChange(e, setFilters, max, useEquation);
     },
     []
   );
@@ -73,7 +77,8 @@ const FilterPopup: React.FC<FilterPopupProps> = ({
   const renderFilterRow = (
     label: string,
     name: keyof FilterParams,
-    max: number
+    max: number,
+    useEquation: boolean = true
   ) => (
     <div className="filterpopup_row" key={name}>
       <label>{label}</label>
@@ -84,7 +89,7 @@ const FilterPopup: React.FC<FilterPopupProps> = ({
         step="0.1"
         value={filters[name].value}
         name={name}
-        onChange={(e) => handleInputChange(e, max)}
+        onChange={(e) => handleInputChange(e, max, useEquation)}
       />
       {editing.active && editing.name === name ? (
         <input
@@ -183,7 +188,7 @@ const FilterPopup: React.FC<FilterPopupProps> = ({
         100_000_000
       )}
       {renderFilterRow("profit", "profitFilter", 100_000_000)}
-      {renderFilterRow("profit Margin", "profitMarginFilter", 100)}
+      {renderFilterRow("profit Margin", "profitMarginFilter", 100, false)}
       <div className="filterpopup_buttons">
         <button onClick={() => resetFilters(setFilters)}>Reset Filters</button>
         <button onClick={applyFilters}>Apply Filters</button>
